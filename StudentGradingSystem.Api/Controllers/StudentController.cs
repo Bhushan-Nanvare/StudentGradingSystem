@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using StudentGradingSystem.Api.Models;
+using StudentGradingSystem.Api.Services;
 
 namespace StudentGradingSystem.Api.Controllers;
 
@@ -6,9 +8,26 @@ namespace StudentGradingSystem.Api.Controllers;
 [Route("api/students")]
 public class StudentController : ControllerBase
 {
-    [HttpGet]
-    public string GetStudents()
+    private readonly StudentService _studentService;
+
+    public StudentController(StudentService studentService)
     {
-        return "Hello from Student Controller";
+        _studentService = studentService;
     }
+
+    [HttpPost]
+    public IActionResult AddStudent(Student student)
+    {
+    return Ok(student);
+    }
+
+    [HttpGet]
+    public IActionResult GetStudents()
+    {
+        var students = _studentService.GetStudents();
+
+        return Ok(students);
+    }
+
+    
 }
