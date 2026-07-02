@@ -17,8 +17,13 @@ public class StudentService
         return _studentRepository.GetStudents();
     }
 
-    public void AddStudent(Student student)
+    public async Task<Student?> GetStudentById(int id)
     {
-        _studentRepository.AddStudent(student);
+        return await _studentRepository.GetStudentById(id);
+    }
+
+    public async Task AddStudent(Student student)
+    {
+        await _studentRepository.AddStudent(student);
     }
 }

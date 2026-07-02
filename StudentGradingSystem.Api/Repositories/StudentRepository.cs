@@ -24,5 +24,12 @@ public class StudentRepository
     _context.Students.Add(student);
 
     await _context.SaveChangesAsync();
+
+}
+
+public async Task<Student?> GetStudentById(int id)
+{
+    return await _context.Students
+        .FirstOrDefaultAsync(student => student.Id == id);
 }
 }

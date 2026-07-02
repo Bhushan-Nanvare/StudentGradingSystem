@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Services;
-using StudentGradingSystem.Api.DTOs;
 
 namespace StudentGradingSystem.Api.Controllers;
 
@@ -16,21 +16,25 @@ public class StudentController : ControllerBase
         _studentService = studentService;
     }
 
-[HttpPost]
-public IActionResult AddStudent(CreateStudentDto dto)
-{
-    Student student = new Student
+    [HttpPost]
+    public async Task<IActionResult> AddStudent(CreateStudentDto dto)
     {
-        Name = dto.Name,
-        Age = dto.Age,
-        Department = dto.Department,
-        CGPA = dto.CGPA
-    };
+        Student student = new Student
+        {
+            Name = dto.Name,
+            Age = dto.Age,
+            Department = dto.Department,
+            CGPA = dto.CGPA
+        };
 
-    _studentService.AddStudent(student);
+        await _studentService.AddStudent(student);
 
-    return Ok(student);
-}
+        return CreatedAtAction(
+            nameof(GetStudentById),
+            new { id = student.Id },
+            student
+        );
+    }
 
     [HttpGet]
     public IActionResult GetStudents()
@@ -38,5 +42,18 @@ public IActionResult AddStudent(CreateStudentDto dto)
         var students = _studentService.GetStudents();
 
         return Ok(students);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetStudentById(int id)
+    {
+        var student = await _studentService.GetStudentById(id);
+
+        if (student == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(student);
     }
 }
