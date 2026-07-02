@@ -18,7 +18,9 @@ public class StudentController : ControllerBase
     [HttpPost]
     public IActionResult AddStudent(Student student)
     {
-    return Ok(student);
+        _studentService.AddStudent(student);
+
+        return Ok(student);
     }
 
     [HttpGet]
@@ -28,6 +30,4 @@ public class StudentController : ControllerBase
 
         return Ok(students);
     }
-
-    
 }

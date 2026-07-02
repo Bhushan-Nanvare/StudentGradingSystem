@@ -1,30 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Repositories;
 
 public class StudentRepository
 {
+    private readonly AppDbContext _context;
+
+    public StudentRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+
     public List<Student> GetStudents()
     {
-        return new List<Student>
-        {
-            new Student
-            {
-                Id = 1,
-                Name = "Bhushan",
-                Age = 21,
-                Department = "Computer Science",
-                CGPA = 8.9
-            },
+        return _context.Students.ToList();
+    }
 
-            new Student
-            {
-                Id = 2,
-                Name = "Rahul",
-                Age = 20,
-                Department = "Mechanical",
-                CGPA = 8.1
-            }
-        };
+    public void AddStudent(Student student)
+    {
+        _context.Students.Add(student);
+
+        _context.SaveChanges();
     }
 }

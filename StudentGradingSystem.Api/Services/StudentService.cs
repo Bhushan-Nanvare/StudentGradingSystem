@@ -16,4 +16,9 @@ public class StudentService
     {
         return _studentRepository.GetStudents();
     }
+
+    public void AddStudent(Student student)
+    {
+        _studentRepository.AddStudent(student);
+    }
 }
