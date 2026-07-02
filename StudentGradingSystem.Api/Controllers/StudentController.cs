@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Services;
+using StudentGradingSystem.Api.DTOs;
 
 namespace StudentGradingSystem.Api.Controllers;
 
@@ -15,13 +16,21 @@ public class StudentController : ControllerBase
         _studentService = studentService;
     }
 
-    [HttpPost]
-    public IActionResult AddStudent(Student student)
+[HttpPost]
+public IActionResult AddStudent(CreateStudentDto dto)
+{
+    Student student = new Student
     {
-        _studentService.AddStudent(student);
+        Name = dto.Name,
+        Age = dto.Age,
+        Department = dto.Department,
+        CGPA = dto.CGPA
+    };
 
-        return Ok(student);
-    }
+    _studentService.AddStudent(student);
+
+    return Ok(student);
+}
 
     [HttpGet]
     public IActionResult GetStudents()

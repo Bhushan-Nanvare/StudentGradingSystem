@@ -5,14 +5,10 @@ using StudentGradingSystem.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Register services
-builder.Services.AddScoped<StudentRepository>();
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
 builder.Services.AddScoped<StudentService>();
-
-
+builder.Services.AddScoped<StudentRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -20,16 +16,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-// Enable Controllers
 app.MapControllers();
 
 app.Run();

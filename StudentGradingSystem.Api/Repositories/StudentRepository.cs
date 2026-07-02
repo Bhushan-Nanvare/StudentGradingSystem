@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.Models;
+using System.Threading.Tasks;
 
 namespace StudentGradingSystem.Api.Repositories;
 
@@ -18,10 +19,10 @@ public class StudentRepository
         return _context.Students.ToList();
     }
 
-    public void AddStudent(Student student)
-    {
-        _context.Students.Add(student);
+   public async Task AddStudent(Student student)
+{
+    _context.Students.Add(student);
 
-        _context.SaveChanges();
-    }
+    await _context.SaveChangesAsync();
+}
 }
