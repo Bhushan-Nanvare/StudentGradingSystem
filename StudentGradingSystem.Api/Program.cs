@@ -2,13 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.Repositories;
 using StudentGradingSystem.Api.Services;
+using StudentGradingSystem.Api.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<StudentService>();
-builder.Services.AddScoped<StudentRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

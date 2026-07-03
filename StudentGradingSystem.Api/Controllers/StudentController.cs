@@ -2,20 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Services;
-
+using StudentGradingSystem.Api.Interfaces;
 namespace StudentGradingSystem.Api.Controllers;
+
 
 [ApiController]
 [Route("api/students")]
 public class StudentController : ControllerBase
 {
-    private readonly StudentService _studentService;
+   private readonly IStudentService _studentService;
 
-    public StudentController(StudentService studentService)
-    {
-        _studentService = studentService;
-    }
-
+public StudentController(IStudentService studentService)
+{
+    _studentService = studentService;
+}
     [HttpPost]
     public async Task<IActionResult> AddStudent(CreateStudentDto dto)
     {
@@ -82,6 +82,7 @@ public class StudentController : ControllerBase
 
     return NoContent();
 }
+
 
 
 }

@@ -3,10 +3,11 @@ using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using System.Threading.Tasks;
+using StudentGradingSystem.Api.Interfaces;
 
 namespace StudentGradingSystem.Api.Repositories;
 
-public class StudentRepository
+public class StudentRepository : IStudentRepository
 {
     private readonly AppDbContext _context;
 

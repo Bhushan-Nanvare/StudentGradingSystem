@@ -1,14 +1,14 @@
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Repositories;
-
+using StudentGradingSystem.Api.Interfaces;
 namespace StudentGradingSystem.Api.Services;
 
-public class StudentService
+public class StudentService : IStudentService
 {
-    private readonly StudentRepository _studentRepository;
+    private readonly IStudentRepository _studentRepository;
 
-    public StudentService(StudentRepository studentRepository)
+    public StudentService(IStudentRepository studentRepository)
     {
         _studentRepository = studentRepository;
     }
