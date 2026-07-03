@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudentGradingSystem.Api.Data;
+using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using System.Threading.Tasks;
 
@@ -31,5 +32,40 @@ public async Task<Student?> GetStudentById(int id)
 {
     return await _context.Students
         .FirstOrDefaultAsync(student => student.Id == id);
+}
+
+public async Task<Student?> UpdateStudent(int id, UpdateStudentDto dto)
+{
+    var student = await _context.Students.FindAsync(id);
+
+    if (student == null)
+    {
+        return null;
+    }
+
+    student.Name = dto.Name;
+    student.Age = dto.Age;
+    student.Department = dto.Department;
+    student.CGPA = dto.CGPA;
+
+    await _context.SaveChangesAsync();
+
+    return student;
+}
+
+public async Task<bool> DeleteStudent(int id)
+{
+    var student = await _context.Students.FindAsync(id);
+
+    if (student == null)
+    {
+        return false;
+    }
+
+    _context.Students.Remove(student);
+
+    await _context.SaveChangesAsync();
+
+    return true;
 }
 }

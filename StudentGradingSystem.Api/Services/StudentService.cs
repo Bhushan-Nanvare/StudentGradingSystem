@@ -1,3 +1,4 @@
+using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Repositories;
 
@@ -26,4 +27,13 @@ public class StudentService
     {
         await _studentRepository.AddStudent(student);
     }
+    public async Task<Student?> UpdateStudent(int id, UpdateStudentDto dto)
+{
+    return await _studentRepository.UpdateStudent(id, dto);
+}
+
+    public async Task<bool> DeleteStudent(int id)
+{
+    return await _studentRepository.DeleteStudent(id);
+}
 }
