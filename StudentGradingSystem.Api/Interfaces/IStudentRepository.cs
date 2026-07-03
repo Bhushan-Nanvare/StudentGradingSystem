@@ -15,3 +15,4 @@ public interface IStudentRepository
 
     Task<bool> DeleteStudent(int id);
 }
+

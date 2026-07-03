@@ -3,20 +3,14 @@ using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.Repositories;
 using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Interfaces;
+using StudentGradingSystem.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddApplication();
 
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-
-builder.Services.AddScoped<IStudentService, StudentService>();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddPersistence(builder.Configuration);
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

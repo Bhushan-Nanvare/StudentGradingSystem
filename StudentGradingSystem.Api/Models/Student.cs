@@ -12,3 +12,4 @@ public class Student
 
     public double CGPA { get; set; }
 }
+
