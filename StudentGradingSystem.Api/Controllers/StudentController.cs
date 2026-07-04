@@ -6,11 +6,12 @@ using StudentGradingSystem.Api.DTOs.Common;
 using StudentGradingSystem.Api.Filters;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
-
+using Microsoft.AspNetCore.Authorization;
 namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/students")]
+[Authorize]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -103,7 +104,7 @@ public class StudentController : ControllerBase
             Errors = null
         });
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(int id)
     {

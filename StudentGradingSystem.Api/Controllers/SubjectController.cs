@@ -3,11 +3,13 @@ using AutoMapper;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/subjects")]
+[Authorize]
 public class SubjectController : ControllerBase
 {
     private readonly ISubjectService _subjectService;
@@ -67,7 +69,7 @@ public class SubjectController : ControllerBase
 
         return Ok(subject);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSubject(int id)
     {
