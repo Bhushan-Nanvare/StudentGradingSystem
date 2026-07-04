@@ -19,9 +19,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        var token = await _authService.Login(dto);
+        var response = await _authService.Login(dto);
 
-        if (token == null)
+        if (response == null)
         {
             return Unauthorized(new ApiResponse<object>
             {
@@ -36,10 +36,32 @@ public class AuthController : ControllerBase
         {
             Success = true,
             Message = "Login successful.",
-            Data = new
+            Data = response,
+            Errors = null
+        });
+    }   // <-- This brace was missing
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto dto)
+    {
+        var response = await _authService.RefreshToken(dto);
+
+        if (response == null)
+        {
+            return Unauthorized(new ApiResponse<object>
             {
-                Token = token
-            },
+                Success = false,
+                Message = "Invalid or expired refresh token.",
+                Data = null,
+                Errors = null
+            });
+        }
+
+        return Ok(new ApiResponse<AuthResponseDto>
+        {
+            Success = true,
+            Message = "Token refreshed successfully.",
+            Data = response,
             Errors = null
         });
     }

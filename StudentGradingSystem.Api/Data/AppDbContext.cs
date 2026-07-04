@@ -13,4 +13,5 @@ public class AppDbContext : DbContext
     public DbSet<Student> Students { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<ApplicationUser> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 }

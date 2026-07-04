@@ -9,4 +9,6 @@ public class ApplicationUser
     public string PasswordHash { get; set; } = string.Empty;
 
     public string Role { get; set; } = "Student";
+
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
 }
