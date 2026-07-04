@@ -11,7 +11,7 @@ public interface ISubjectService
 
     Task AddSubject(Subject subject);
 
-    Task<Subject?> UpdateSubject(int id, UpdateSubjectDto dto);
+    Task<Subject?> UpdateSubject(int id, Subject dto);
 
     Task<bool> DeleteSubject(int id);
 }

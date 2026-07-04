@@ -5,6 +5,8 @@ using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Extensions;
 using StudentGradingSystem.Api.Middleware;
+using StudentGradingSystem.Api.Mappings;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddApplication();
 
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(StudentProfile));
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

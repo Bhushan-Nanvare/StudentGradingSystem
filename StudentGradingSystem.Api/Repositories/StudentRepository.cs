@@ -35,7 +35,7 @@ public async Task<Student?> GetStudentById(int id)
         .FirstOrDefaultAsync(student => student.Id == id);
 }
 
-public async Task<Student?> UpdateStudent(int id, UpdateStudentDto dto)
+public async Task<Student?> UpdateStudent(int id, Student updatedStudent)
 {
     var student = await _context.Students.FindAsync(id);
 
@@ -44,10 +44,10 @@ public async Task<Student?> UpdateStudent(int id, UpdateStudentDto dto)
         return null;
     }
 
-    student.Name = dto.Name;
-    student.Age = dto.Age;
-    student.Department = dto.Department;
-    student.CGPA = dto.CGPA;
+    student.Name = updatedStudent.Name;
+    student.Age = updatedStudent.Age;
+    student.Department = updatedStudent.Department;
+    student.CGPA = updatedStudent.CGPA;
 
     await _context.SaveChangesAsync();
 

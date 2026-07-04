@@ -2,21 +2,24 @@ using Microsoft.Extensions.Logging;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
-
+using AutoMapper;
 namespace StudentGradingSystem.Api.Services;
 
 public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
     private readonly ILogger<StudentService> _logger;
+    private readonly IMapper _mapper;
 
-    public StudentService(
-        IStudentRepository studentRepository,
-        ILogger<StudentService> logger)
-    {
-        _studentRepository = studentRepository;
-        _logger = logger;
-    }
+   public StudentService(
+    IStudentRepository studentRepository,
+    ILogger<StudentService> logger,
+    IMapper mapper)
+{
+    _studentRepository = studentRepository;
+    _logger = logger;
+    _mapper = mapper;
+}
 
     public List<Student> GetStudents()
     {
@@ -41,7 +44,7 @@ public class StudentService : IStudentService
             student.Id);
     }
 
-public async Task<Student?> UpdateStudent(int id, UpdateStudentDto dto)
+public async Task<Student?> UpdateStudent(int id, Student dto)
 {
     _logger.LogInformation(
         "Updating student with Id: {StudentId}",

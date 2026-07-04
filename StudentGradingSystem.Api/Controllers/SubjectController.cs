@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
@@ -10,10 +11,14 @@ namespace StudentGradingSystem.Api.Controllers;
 public class SubjectController : ControllerBase
 {
     private readonly ISubjectService _subjectService;
+    private readonly IMapper _mapper;
 
-    public SubjectController(ISubjectService subjectService)
+    public SubjectController(
+        ISubjectService subjectService,
+        IMapper mapper)
     {
         _subjectService = subjectService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -40,25 +45,18 @@ public class SubjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddSubject(CreateSubjectDto dto)
     {
-        Subject subject = new Subject
-        {
-            SubjectCode = dto.SubjectCode,
-            Name = dto.Name,
-            Credits = dto.Credits,
-            Semester = dto.Semester
-        };
+        Subject subject = _mapper.Map<Subject>(dto);
 
         await _subjectService.AddSubject(subject);
 
         return CreatedAtAction(
             nameof(GetSubjectById),
             new { id = subject.Id },
-            subject
-        );
+            subject);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSubject(int id, UpdateSubjectDto dto)
+    public async Task<IActionResult> UpdateSubject(int id, Subject dto)
     {
         var subject = await _subjectService.UpdateSubject(id, dto);
 

@@ -33,24 +33,24 @@ public class SubjectRepository : ISubjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Subject?> UpdateSubject(int id, UpdateSubjectDto dto)
+public async Task<Subject?> UpdateSubject(int id, Subject updatedSubject)
+{
+    var subject = await _context.Subjects.FindAsync(id);
+
+    if (subject == null)
     {
-        var subject = await _context.Subjects.FindAsync(id);
-
-        if (subject == null)
-        {
-            return null;
-        }
-
-        subject.SubjectCode = dto.SubjectCode;
-        subject.Name = dto.Name;
-        subject.Credits = dto.Credits;
-        subject.Semester = dto.Semester;
-
-        await _context.SaveChangesAsync();
-
-        return subject;
+        return null;
     }
+
+    subject.SubjectCode = updatedSubject.SubjectCode;
+    subject.Name = updatedSubject.Name;
+    subject.Credits = updatedSubject.Credits;
+    subject.Semester = updatedSubject.Semester;
+
+    await _context.SaveChangesAsync();
+
+    return subject;
+}
 
     public async Task<bool> DeleteSubject(int id)
     {

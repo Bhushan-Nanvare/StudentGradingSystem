@@ -36,7 +36,7 @@ public async Task AddSubject(Subject subject)
     await _subjectRepository.AddSubject(subject);
 }
 
-    public async Task<Subject?> UpdateSubject(int id, UpdateSubjectDto dto)
+    public async Task<Subject?> UpdateSubject(int id, Subject dto)
     {
         return await _subjectRepository.UpdateSubject(id, dto);
     }

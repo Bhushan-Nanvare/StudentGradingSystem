@@ -13,7 +13,7 @@ public interface IStudentService
 
     Task AddStudent(Student student);
 
-    Task<Student?> UpdateStudent(int id, UpdateStudentDto dto);
+    Task<Student?> UpdateStudent(int id, Student dto);
 
     Task<bool> DeleteStudent(int id);
 }
