@@ -1,6 +1,7 @@
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
+using StudentGradingSystem.Api.Exceptions;
 
 namespace StudentGradingSystem.Api.Services;
 
@@ -29,7 +30,7 @@ public async Task AddSubject(Subject subject)
 
     if (existingSubject != null)
     {
-        throw new Exception("Subject code already exists.");
+        throw new DuplicateSubjectCodeException(subject.SubjectCode);;
     }
 
     await _subjectRepository.AddSubject(subject);

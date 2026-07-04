@@ -4,6 +4,7 @@ using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Interfaces;
 namespace StudentGradingSystem.Api.Controllers;
+using StudentGradingSystem.Api.Common;
 
 
 [ApiController]
@@ -44,18 +45,28 @@ public StudentController(IStudentService studentService)
         return Ok(students);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetStudentById(int id)
+[HttpGet("{id}")]
+public async Task<IActionResult> GetStudentById(int id)
+{
+    var student = await _studentService.GetStudentById(id);
+
+    if (student == null)
     {
-        var student = await _studentService.GetStudentById(id);
-
-        if (student == null)
+        return NotFound(new ApiResponse<Student>
         {
-            return NotFound();
-        }
-
-        return Ok(student);
+            Success = false,
+            Message = "Student not found.",
+            Data = null
+        });
     }
+
+    return Ok(new ApiResponse<Student>
+    {
+        Success = true,
+        Message = "Student retrieved successfully.",
+        Data = student
+    });
+}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)

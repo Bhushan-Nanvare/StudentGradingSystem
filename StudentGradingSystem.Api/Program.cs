@@ -4,8 +4,10 @@ using StudentGradingSystem.Api.Repositories;
 using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Extensions;
+using StudentGradingSystem.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
 builder.Services.AddApplication();
@@ -16,6 +18,7 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -24,7 +27,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+// app.UseHttpsRedirection();
 
 app.MapControllers();
 
