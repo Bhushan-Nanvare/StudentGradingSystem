@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using StudentGradingSystem.Api.Exceptions;
-
+using StudentGradingSystem.Api.Common;
 namespace StudentGradingSystem.Api.Middleware;
 
 public class ExceptionMiddleware
@@ -33,10 +33,13 @@ public class ExceptionMiddleware
             context.Response.StatusCode = ex.StatusCode;
             context.Response.ContentType = "application/json";
 
-            var response = new
-            {
-                Message = ex.Message
-            };
+            var response = new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null,
+                    Errors = null
+                };
 
             await context.Response.WriteAsync(
                 JsonSerializer.Serialize(response));
@@ -50,10 +53,13 @@ public class ExceptionMiddleware
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
 
-            var response = new
-            {
-                Message = "An unexpected error occurred."
-            };
+                var response = new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "An unexpected error occurred.",
+                    Data = null,
+                    Errors = null
+                };
 
             await context.Response.WriteAsync(
                 JsonSerializer.Serialize(response));

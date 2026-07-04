@@ -17,51 +17,60 @@ public class SubjectRepository : ISubjectRepository
 
     public List<Subject> GetSubjects()
     {
-        return _context.Subjects.ToList();
+        return _context.Subjects
+            .Where(subject => !subject.IsDeleted)
+            .ToList();
     }
 
     public async Task<Subject?> GetSubjectById(int id)
     {
         return await _context.Subjects
-            .FirstOrDefaultAsync(subject => subject.Id == id);
+            .FirstOrDefaultAsync(subject =>
+                subject.Id == id &&
+                !subject.IsDeleted);
     }
 
     public async Task AddSubject(Subject subject)
     {
         _context.Subjects.Add(subject);
+        subject.CreatedAt = DateTime.UtcNow;
+        subject.CreatedBy = "System";
 
         await _context.SaveChangesAsync();
     }
 
-public async Task<Subject?> UpdateSubject(int id, Subject updatedSubject)
-{
-    var subject = await _context.Subjects.FindAsync(id);
-
-    if (subject == null)
+    public async Task<Subject?> UpdateSubject(int id, Subject updatedSubject)
     {
-        return null;
+        var subject = await _context.Subjects.FindAsync(id);
+
+        if (subject == null || subject.IsDeleted)
+        {
+            return null;
+        }
+
+        subject.SubjectCode = updatedSubject.SubjectCode;
+        subject.Name = updatedSubject.Name;
+        subject.Credits = updatedSubject.Credits;
+        subject.Semester = updatedSubject.Semester;
+        subject.UpdatedAt = DateTime.UtcNow;
+        subject.UpdatedBy = "System";
+
+        await _context.SaveChangesAsync();
+
+        return subject;
     }
-
-    subject.SubjectCode = updatedSubject.SubjectCode;
-    subject.Name = updatedSubject.Name;
-    subject.Credits = updatedSubject.Credits;
-    subject.Semester = updatedSubject.Semester;
-
-    await _context.SaveChangesAsync();
-
-    return subject;
-}
 
     public async Task<bool> DeleteSubject(int id)
     {
         var subject = await _context.Subjects.FindAsync(id);
 
-        if (subject == null)
+        if (subject == null || subject.IsDeleted)
         {
             return false;
         }
 
-        _context.Subjects.Remove(subject);
+        subject.IsDeleted = true;
+        subject.DeletedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
@@ -71,8 +80,8 @@ public async Task<Subject?> UpdateSubject(int id, Subject updatedSubject)
     public async Task<Subject?> GetBySubjectCode(string subjectCode)
     {
         return await _context.Subjects
-            .FirstOrDefaultAsync(subject => subject.SubjectCode == subjectCode);
+            .FirstOrDefaultAsync(subject =>
+                subject.SubjectCode == subjectCode &&
+                !subject.IsDeleted);
     }
 }
-
-

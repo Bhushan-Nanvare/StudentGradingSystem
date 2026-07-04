@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using StudentGradingSystem.Api.Common;
 using StudentGradingSystem.Api.DTOs;
+using StudentGradingSystem.Api.DTOs.Common;
+using StudentGradingSystem.Api.Filters;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
 
@@ -22,6 +24,7 @@ public class StudentController : ControllerBase
         _mapper = mapper;
     }
 
+    [ServiceFilter(typeof(ValidationFilter<CreateStudentDto>))]
     [HttpPost]
     public async Task<IActionResult> AddStudent(CreateStudentDto dto)
     {
@@ -36,11 +39,17 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetStudents()
+    public async Task<IActionResult> GetStudents([FromQuery] StudentFilterDto filter)
     {
-        var students = _studentService.GetStudents();
+        var students = await _studentService.GetStudents(filter);
 
-        return Ok(students);
+        return Ok(new ApiResponse<List<Student>>
+        {
+            Success = true,
+            Message = "Students retrieved successfully.",
+            Data = students,
+            Errors = null
+        });
     }
 
     [HttpGet("{id}")]
@@ -54,7 +63,8 @@ public class StudentController : ControllerBase
             {
                 Success = false,
                 Message = "Student not found.",
-                Data = null
+                Data = null,
+                Errors = null
             });
         }
 
@@ -62,34 +72,37 @@ public class StudentController : ControllerBase
         {
             Success = true,
             Message = "Student retrieved successfully.",
-            Data = student
+            Data = student,
+            Errors = null
         });
     }
 
     [HttpPut("{id}")]
-public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)
-{
-    Student student = _mapper.Map<Student>(dto);
-
-    var updatedStudent = await _studentService.UpdateStudent(id, student);
-
-    if (updatedStudent == null)
+    public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)
     {
-        return NotFound(new ApiResponse<Student>
+        Student student = _mapper.Map<Student>(dto);
+
+        var updatedStudent = await _studentService.UpdateStudent(id, student);
+
+        if (updatedStudent == null)
         {
-            Success = false,
-            Message = "Student not found.",
-            Data = null
+            return NotFound(new ApiResponse<Student>
+            {
+                Success = false,
+                Message = "Student not found.",
+                Data = null,
+                Errors = null
+            });
+        }
+
+        return Ok(new ApiResponse<Student>
+        {
+            Success = true,
+            Message = "Student updated successfully.",
+            Data = updatedStudent,
+            Errors = null
         });
     }
-
-    return Ok(new ApiResponse<Student>
-    {
-        Success = true,
-        Message = "Student updated successfully.",
-        Data = updatedStudent
-    });
-}
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(int id)
@@ -98,9 +111,21 @@ public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)
 
         if (!deleted)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<object>
+            {
+                Success = false,
+                Message = "Student not found.",
+                Data = null,
+                Errors = null
+            });
         }
 
-        return NoContent();
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "Student deleted successfully.",
+            Data = null,
+            Errors = null
+        });
     }
 }

@@ -4,6 +4,7 @@ using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
 using AutoMapper;
 namespace StudentGradingSystem.Api.Services;
+using StudentGradingSystem.Api.DTOs.Common;
 
 public class StudentService : IStudentService
 {
@@ -21,10 +22,10 @@ public class StudentService : IStudentService
     _mapper = mapper;
 }
 
-    public List<Student> GetStudents()
-    {
-        return _studentRepository.GetStudents();
-    }
+public async Task<List<Student>> GetStudents(StudentFilterDto filter)
+{
+    return await _studentRepository.GetStudents(filter);
+}
 
     public async Task<Student?> GetStudentById(int id)
     {
