@@ -23,10 +23,17 @@ public class SubjectService : ISubjectService
         return await _subjectRepository.GetSubjectById(id);
     }
 
-    public async Task AddSubject(Subject subject)
+public async Task AddSubject(Subject subject)
+{
+    var existingSubject = await _subjectRepository.GetBySubjectCode(subject.SubjectCode);
+
+    if (existingSubject != null)
     {
-        await _subjectRepository.AddSubject(subject);
+        throw new Exception("Subject code already exists.");
     }
+
+    await _subjectRepository.AddSubject(subject);
+}
 
     public async Task<Subject?> UpdateSubject(int id, UpdateSubjectDto dto)
     {

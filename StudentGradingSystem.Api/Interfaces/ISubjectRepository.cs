@@ -14,4 +14,6 @@ public interface ISubjectRepository
     Task<Subject?> UpdateSubject(int id, UpdateSubjectDto dto);
 
     Task<bool> DeleteSubject(int id);
+
+    Task<Subject?> GetBySubjectCode(string subjectCode);
 }

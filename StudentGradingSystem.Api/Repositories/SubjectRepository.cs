@@ -67,4 +67,12 @@ public class SubjectRepository : ISubjectRepository
 
         return true;
     }
+
+    public async Task<Subject?> GetBySubjectCode(string subjectCode)
+    {
+        return await _context.Subjects
+            .FirstOrDefaultAsync(subject => subject.SubjectCode == subjectCode);
+    }
 }
+
+
