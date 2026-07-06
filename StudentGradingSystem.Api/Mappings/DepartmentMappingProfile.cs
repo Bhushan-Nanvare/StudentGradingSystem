@@ -4,14 +4,10 @@ using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Mappings;
 
-public class StudentProfile : Profile
+public class DepartmentMappingProfile : Profile
 {
-    public StudentProfile()
+    public DepartmentMappingProfile()
     {
-        CreateMap<CreateStudentDto, Student>();
-
-        CreateMap<UpdateStudentDto, Student>();
-
         CreateMap<CreateDepartmentDto, Department>();
 
         CreateMap<UpdateDepartmentDto, Department>();
@@ -19,5 +15,7 @@ public class StudentProfile : Profile
         CreateMap<Department, CreateDepartmentDto>();
 
         CreateMap<Department, UpdateDepartmentDto>();
+
+        CreateMap<Department, DepartmentResponseDto>();
     }
 }

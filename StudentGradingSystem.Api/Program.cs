@@ -26,7 +26,7 @@ builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 
 // AutoMapper
-builder.Services.AddAutoMapper(typeof(StudentProfile));
+builder.Services.AddAutoMapper(typeof(Program));
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<CreateStudentValidator>();
