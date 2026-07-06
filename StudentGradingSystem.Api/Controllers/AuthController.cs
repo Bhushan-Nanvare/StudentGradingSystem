@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
             Data = response,
             Errors = null
         });
-    }   // <-- This brace was missing
+    }   
 
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto dto)

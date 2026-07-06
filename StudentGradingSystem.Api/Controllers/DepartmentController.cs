@@ -41,27 +41,31 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDepartmentById(int id)
-    {
-        var departments = await _departmentService.GetDepartments();
-
-        var response =
-            _mapper.Map<List<DepartmentResponseDto>>(departments);
-
-        return Ok(new ApiResponse<List<DepartmentResponseDto>>
+        public async Task<IActionResult> GetDepartmentById(int id)
         {
-            Success = true,
-            Message = "Departments retrieved successfully.",
-            Data = response
-        });
+            var department =
+                await _departmentService.GetDepartmentById(id);
 
-        return Ok(new ApiResponse<Department>
+            if (department == null)
+            {
+            return NotFound(new ApiResponse<object>
+                {
+                Success = false,
+                Message = "Department not found.",
+                Data = null
+                });
+            }
+
+            var response =
+            _mapper.Map<DepartmentResponseDto>(department);
+
+            return Ok(new ApiResponse<DepartmentResponseDto>
         {
-            Success = true,
-            Message = "Department retrieved successfully.",
-            Data = department
-        });
-    }
+                Success = true,
+                Message = "Department retrieved successfully.",
+                Data = response
+            });
+        }
 
     [HttpPost]
     public async Task<IActionResult> AddDepartment(CreateDepartmentDto dto)

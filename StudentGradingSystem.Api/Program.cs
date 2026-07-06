@@ -15,6 +15,7 @@ using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Seed;
 using StudentGradingSystem.Api.Security;
+using StudentGradingSystem.Api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,10 @@ builder.Services.Configure<JwtSettings>(
     
 
 builder.Services.AddSingleton<PasswordHasher>();
+
+builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
+
+builder.Services.AddScoped<IFacultyService, FacultyService>();
 // JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
