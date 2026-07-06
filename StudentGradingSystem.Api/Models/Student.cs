@@ -8,7 +8,9 @@ public class Student
 
     public int Age { get; set; }
 
-    public string Department { get; set; } = string.Empty;
+    public int DepartmentId { get; set; }
+
+    public Department Department { get; set; } = null!;
 
     public double CGPA { get; set; }
 

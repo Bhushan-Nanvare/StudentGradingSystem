@@ -31,4 +31,12 @@ public class Subject
     public string? CreatedBy { get; set; }
 
     public string? UpdatedBy { get; set; }
+
+    public int DepartmentId { get; set; }
+
+    public Department Department { get; set; } = null!;
+
+    public int FacultyId { get; set; }
+
+    public Faculty Faculty { get; set; } = null!;
 }

@@ -30,7 +30,7 @@ public class StudentRepository : IStudentRepository
         if (!string.IsNullOrWhiteSpace(filter.Department))
         {
             query = query.Where(student =>
-                student.Department == filter.Department);
+                student.Department.Name == filter.Department);
         }
 
         if (filter.MinCGPA.HasValue)
