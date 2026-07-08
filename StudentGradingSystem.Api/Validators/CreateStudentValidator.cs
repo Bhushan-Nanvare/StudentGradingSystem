@@ -14,9 +14,9 @@ public class CreateStudentValidator : AbstractValidator<CreateStudentDto>
         RuleFor(student => student.Age)
             .InclusiveBetween(16, 100);
 
-        RuleFor(student => student.Department)
-            .NotEmpty()
-            .MaximumLength(100);
+        RuleFor(student => student.DepartmentId)
+            .GreaterThan(0)
+            .WithMessage("Please select a valid department.");
 
         RuleFor(student => student.CGPA)
             .InclusiveBetween(0, 10);

@@ -10,7 +10,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/departments")]
-[Authorize]
+//[Authorize]
 public class DepartmentController : ControllerBase
 {
     private readonly IDepartmentService _departmentService;
@@ -107,7 +107,7 @@ public class DepartmentController : ControllerBase
         });
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDepartment(int id)
     {

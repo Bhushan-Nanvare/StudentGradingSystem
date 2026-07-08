@@ -49,6 +49,10 @@ builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
 
 builder.Services.AddScoped<IFacultyService, FacultyService>();
 
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 // JWT Authentication
@@ -86,6 +90,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Swagger
@@ -104,6 +119,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 // Authentication & Authorization
 app.UseAuthentication();
+
+app.UseCors("ReactPolicy");
+
 app.UseAuthorization();
 
 // Controllers

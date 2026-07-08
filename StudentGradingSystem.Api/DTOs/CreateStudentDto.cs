@@ -11,7 +11,7 @@ public class CreateStudentDto
     public int Age { get; set; }
 
     [Required]
-    public string Department { get; set; } = "";
+    public int DepartmentId { get; set; }
 
     [Range(0, 10)]
     public double CGPA { get; set; }

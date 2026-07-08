@@ -11,7 +11,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/students")]
-[Authorize]
+//[Authorize]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -104,7 +104,7 @@ public class StudentController : ControllerBase
             Errors = null
         });
     }
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(int id)
     {
