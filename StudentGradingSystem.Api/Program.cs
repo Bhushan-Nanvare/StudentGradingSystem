@@ -35,6 +35,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateStudentValidator>();
 // Validation Filter
 builder.Services.AddScoped(typeof(ValidationFilter<>));
 
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+
 // JWT Settings
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
@@ -46,6 +48,9 @@ builder.Services.AddSingleton<PasswordHasher>();
 builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
 
 builder.Services.AddScoped<IFacultyService, FacultyService>();
+
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 // JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
