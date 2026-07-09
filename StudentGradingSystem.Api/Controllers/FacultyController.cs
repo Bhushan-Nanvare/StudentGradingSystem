@@ -10,7 +10,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/faculties")]
-[Authorize]
+//[Authorize]
 public class FacultyController : ControllerBase
 {
     private readonly IFacultyService _facultyService;
@@ -109,7 +109,7 @@ public class FacultyController : ControllerBase
         });
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFaculty(int id)
     {

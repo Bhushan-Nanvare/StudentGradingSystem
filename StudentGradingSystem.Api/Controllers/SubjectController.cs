@@ -9,7 +9,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/subjects")]
-[Authorize]
+//[Authorize]
 public class SubjectController : ControllerBase
 {
     private readonly ISubjectService _subjectService;
@@ -69,7 +69,7 @@ public class SubjectController : ControllerBase
 
         return Ok(subject);
     }
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSubject(int id)
     {

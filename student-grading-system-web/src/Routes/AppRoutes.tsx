@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardPage from "../pages/Dashboard/DashboardPage";
 
-import StudentPage from "../pages/Students/StudentPage";
+import StudentPage from "@/pages/Students/StudentPage";
 import FacultyPage from "../pages/Faculty/FacultyPage";
 import DepartmentPage from "../pages/Departments/DepartmentPage";
 import SubjectPage from "../pages/Subjects/SubjectPage";
