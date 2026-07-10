@@ -8,9 +8,9 @@ namespace StudentGradingSystem.Api.Interfaces;
 
 public interface IStudentService
 {
-    Task<List<Student>> GetStudents(StudentFilterDto filter);
+    Task<List<StudentResponseDto>> GetStudents(StudentFilterDto filter);
 
-    Task<Student?> GetStudentById(int id);
+    Task<StudentResponseDto?> GetStudentById(int id);
 
     Task AddStudent(Student student);
 

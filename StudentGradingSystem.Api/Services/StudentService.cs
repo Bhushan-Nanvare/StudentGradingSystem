@@ -4,6 +4,7 @@ using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
 using AutoMapper;
 namespace StudentGradingSystem.Api.Services;
+
 using StudentGradingSystem.Api.DTOs.Common;
 
 public class StudentService : IStudentService
@@ -12,24 +13,33 @@ public class StudentService : IStudentService
     private readonly ILogger<StudentService> _logger;
     private readonly IMapper _mapper;
 
-   public StudentService(
-    IStudentRepository studentRepository,
-    ILogger<StudentService> logger,
-    IMapper mapper)
-{
-    _studentRepository = studentRepository;
-    _logger = logger;
-    _mapper = mapper;
-}
-
-public async Task<List<Student>> GetStudents(StudentFilterDto filter)
-{
-    return await _studentRepository.GetStudents(filter);
-}
-
-    public async Task<Student?> GetStudentById(int id)
+    public StudentService(
+     IStudentRepository studentRepository,
+     ILogger<StudentService> logger,
+     IMapper mapper)
     {
-        return await _studentRepository.GetStudentById(id);
+        _studentRepository = studentRepository;
+        _logger = logger;
+        _mapper = mapper;
+    }
+
+    public async Task<List<StudentResponseDto>> GetStudents(StudentFilterDto filter)
+    {
+        var students = await _studentRepository.GetStudents(filter);
+
+        return _mapper.Map<List<StudentResponseDto>>(students);
+    }
+
+    public async Task<StudentResponseDto?> GetStudentById(int id)
+    {
+        var student = await _studentRepository.GetStudentById(id);
+
+        if (student == null)
+        {
+            return null;
+        }
+
+        return _mapper.Map<StudentResponseDto>(student);
     }
 
     public async Task AddStudent(Student student)
@@ -45,51 +55,51 @@ public async Task<List<Student>> GetStudents(StudentFilterDto filter)
             student.Id);
     }
 
-public async Task<Student?> UpdateStudent(int id, Student dto)
-{
-    _logger.LogInformation(
-        "Updating student with Id: {StudentId}",
-        id);
-
-    var student = await _studentRepository.UpdateStudent(id, dto);
-
-    if (student == null)
+    public async Task<Student?> UpdateStudent(int id, Student dto)
     {
-        _logger.LogWarning(
-            "Student not found for update. Id: {StudentId}",
+        _logger.LogInformation(
+            "Updating student with Id: {StudentId}",
             id);
 
-        return null;
-    }
+        var student = await _studentRepository.UpdateStudent(id, dto);
 
-    _logger.LogInformation(
-        "Student updated successfully. Id: {StudentId}",
-        id);
+        if (student == null)
+        {
+            _logger.LogWarning(
+                "Student not found for update. Id: {StudentId}",
+                id);
 
-    return student;
-}
+            return null;
+        }
 
-public async Task<bool> DeleteStudent(int id)
-{
-    _logger.LogInformation(
-        "Deleting student with Id: {StudentId}",
-        id);
-
-    bool deleted = await _studentRepository.DeleteStudent(id);
-
-    if (!deleted)
-    {
-        _logger.LogWarning(
-            "Student not found for deletion. Id: {StudentId}",
+        _logger.LogInformation(
+            "Student updated successfully. Id: {StudentId}",
             id);
 
-        return false;
+        return student;
     }
 
-    _logger.LogInformation(
-        "Student deleted successfully. Id: {StudentId}",
-        id);
+    public async Task<bool> DeleteStudent(int id)
+    {
+        _logger.LogInformation(
+            "Deleting student with Id: {StudentId}",
+            id);
 
-    return true;
-}
+        bool deleted = await _studentRepository.DeleteStudent(id);
+
+        if (!deleted)
+        {
+            _logger.LogWarning(
+                "Student not found for deletion. Id: {StudentId}",
+                id);
+
+            return false;
+        }
+
+        _logger.LogInformation(
+            "Student deleted successfully. Id: {StudentId}",
+            id);
+
+        return true;
+    }
 }

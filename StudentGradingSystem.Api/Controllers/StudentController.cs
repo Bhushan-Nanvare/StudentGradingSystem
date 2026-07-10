@@ -44,7 +44,7 @@ public class StudentController : ControllerBase
     {
         var students = await _studentService.GetStudents(filter);
 
-        return Ok(new ApiResponse<List<Student>>
+        return Ok(new ApiResponse<List<StudentResponseDto>>
         {
             Success = true,
             Message = "Students retrieved successfully.",
@@ -60,7 +60,7 @@ public class StudentController : ControllerBase
 
         if (student == null)
         {
-            return NotFound(new ApiResponse<Student>
+            return NotFound(new ApiResponse<StudentResponseDto>
             {
                 Success = false,
                 Message = "Student not found.",
@@ -69,7 +69,7 @@ public class StudentController : ControllerBase
             });
         }
 
-        return Ok(new ApiResponse<Student>
+        return Ok(new ApiResponse<StudentResponseDto>
         {
             Success = true,
             Message = "Student retrieved successfully.",
@@ -77,7 +77,6 @@ public class StudentController : ControllerBase
             Errors = null
         });
     }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)
     {
@@ -121,7 +120,7 @@ public class StudentController : ControllerBase
             });
         }
 
-        return Ok(new ApiResponse<object>
+            return Ok(new ApiResponse<object>
         {
             Success = true,
             Message = "Student deleted successfully.",

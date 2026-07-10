@@ -26,7 +26,7 @@ export default function StudentTable({
               <td className="px-4 py-3">{student.id}</td>
               <td className="px-4 py-3">{student.name}</td>
               <td className="px-4 py-3">{student.age}</td>
-              <td className="px-4 py-3">{student.departmentId}</td>
+              <td className="px-4 py-3">{student.departmentName}</td>
               <td className="px-4 py-3">{student.cgpa}</td>
             </tr>
           ))}

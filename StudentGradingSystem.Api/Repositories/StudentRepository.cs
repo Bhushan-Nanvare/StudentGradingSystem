@@ -18,7 +18,8 @@ public class StudentRepository : IStudentRepository
     public async Task<List<Student>> GetStudents(StudentFilterDto filter)
     {
         IQueryable<Student> query = _context.Students
-        .Where(student => !student.IsDeleted);
+            .Include(student => student.Department)
+            .Where(student => !student.IsDeleted);
 
         // Filtering
         if (!string.IsNullOrWhiteSpace(filter.Name))
@@ -79,9 +80,10 @@ public class StudentRepository : IStudentRepository
     public async Task<Student?> GetStudentById(int id)
     {
         return await _context.Students
-    .FirstOrDefaultAsync(student =>
-        student.Id == id &&
-        !student.IsDeleted);
+            .Include(student => student.Department)
+            .FirstOrDefaultAsync(student =>
+                student.Id == id &&
+                !student.IsDeleted);
     }
 
     public async Task AddStudent(Student student)
