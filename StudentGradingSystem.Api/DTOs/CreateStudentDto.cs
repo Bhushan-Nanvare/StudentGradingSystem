@@ -15,4 +15,7 @@ public class CreateStudentDto
 
     [Range(0, 10)]
     public double CGPA { get; set; }
+
+    [Required]
+    public int FacultyId { get; set; }
 }

@@ -4,6 +4,7 @@ using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
 using Microsoft.AspNetCore.Authorization;
+using StudentGradingSystem.Api.Common;
 
 namespace StudentGradingSystem.Api.Controllers;
 
@@ -22,13 +23,21 @@ public class SubjectController : ControllerBase
         _subjectService = subjectService;
         _mapper = mapper;
     }
-
     [HttpGet]
     public IActionResult GetSubjects()
     {
-        var subjects = _subjectService.GetSubjects();
+        var subjects =
+            _subjectService.GetSubjects();
 
-        return Ok(subjects);
+        var response =
+            _mapper.Map<List<SubjectResponseDto>>(subjects);
+
+        return Ok(new ApiResponse<List<SubjectResponseDto>>
+        {
+            Success = true,
+            Message = "Subjects retrieved successfully.",
+            Data = response
+        });
     }
 
     [HttpGet("{id}")]
@@ -41,7 +50,32 @@ public class SubjectController : ControllerBase
             return NotFound();
         }
 
-        return Ok(subject);
+        var response = _mapper.Map<SubjectResponseDto>(subject);
+
+        return Ok(new ApiResponse<SubjectResponseDto>
+        {
+            Success = true,
+            Message = "Subject retrieved successfully.",
+            Data = response
+        });
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateSubject(
+        int id,
+        UpdateSubjectDto dto)
+    {
+        var subject = _mapper.Map<Subject>(dto);
+
+        var updatedSubject =
+            await _subjectService.UpdateSubject(id, subject);
+
+        if (updatedSubject == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(updatedSubject);
     }
 
     [HttpPost]

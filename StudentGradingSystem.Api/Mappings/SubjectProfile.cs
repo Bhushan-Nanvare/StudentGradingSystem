@@ -11,5 +11,15 @@ public class SubjectProfile : Profile
         CreateMap<CreateSubjectDto, Subject>();
 
         CreateMap<UpdateSubjectDto, Subject>();
+
+        CreateMap<Subject, SubjectResponseDto>()
+            .ForMember(
+                dest => dest.DepartmentName,
+                opt => opt.MapFrom(src => src.Department.Name)
+            )
+            .ForMember(
+                dest => dest.FacultyName,
+                opt => opt.MapFrom(src => src.Faculty.FirstName + " " + src.Faculty.LastName)
+            );
     }
 }

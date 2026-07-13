@@ -18,16 +18,20 @@ public class SubjectRepository : ISubjectRepository
     public List<Subject> GetSubjects()
     {
         return _context.Subjects
-            .Where(subject => !subject.IsDeleted)
+            .Include(s => s.Department)
+            .Include(s => s.Faculty)
+            .Where(s => !s.IsDeleted)
             .ToList();
     }
 
     public async Task<Subject?> GetSubjectById(int id)
     {
         return await _context.Subjects
-            .FirstOrDefaultAsync(subject =>
-                subject.Id == id &&
-                !subject.IsDeleted);
+            .Include(s => s.Department)
+            .Include(s => s.Faculty)
+            .FirstOrDefaultAsync(s =>
+                s.Id == id &&
+                !s.IsDeleted);
     }
 
     public async Task AddSubject(Subject subject)
