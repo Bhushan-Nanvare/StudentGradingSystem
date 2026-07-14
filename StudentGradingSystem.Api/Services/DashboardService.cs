@@ -1,19 +1,27 @@
-using StudentGradingSystem.Api.DTOs.Dashboard;
+using Microsoft.EntityFrameworkCore;
+using StudentGradingSystem.Api.Data;
+using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.Interfaces;
-
+using StudentGradingSystem.Api.DTOs.Dashboard;
 namespace StudentGradingSystem.Api.Services;
 
 public class DashboardService : IDashboardService
 {
-    private readonly IDashboardRepository _dashboardRepository;
+    private readonly AppDbContext _context;
 
-    public DashboardService(IDashboardRepository dashboardRepository)
+    public DashboardService(AppDbContext context)
     {
-        _dashboardRepository = dashboardRepository;
+        _context = context;
     }
 
     public async Task<DashboardStatsDto> GetDashboardStatistics()
     {
-        return await _dashboardRepository.GetDashboardStatistics();
+        return new DashboardStatsDto
+        {
+            StudentCount = await _context.Students.CountAsync(),
+            FacultyCount = await _context.Faculties.CountAsync(),
+            DepartmentCount = await _context.Departments.CountAsync(),
+            SubjectCount = await _context.Subjects.CountAsync(),
+        };
     }
 }

@@ -7,11 +7,13 @@ import StudentPage from "@/pages/Students/StudentPage";
 import FacultyPage from "../pages/Faculty/FacultyPage";
 import DepartmentPage from "../pages/Departments/DepartmentPage";
 import SubjectPage from "../pages/Subjects/SubjectPage";
+import LoginPage from "@/pages/Auth/LoginPage";
 
 function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DashboardLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
 

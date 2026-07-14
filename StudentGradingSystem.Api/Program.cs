@@ -37,6 +37,8 @@ builder.Services.AddScoped(typeof(ValidationFilter<>));
 
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
+
+
 // JWT Settings
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));

@@ -6,26 +6,29 @@ using StudentGradingSystem.Api.Interfaces;
 namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/dashboard")]
+//[Authorize]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;
 
-    public DashboardController(IDashboardService dashboardService)
+    public DashboardController(
+        IDashboardService dashboardService)
     {
         _dashboardService = dashboardService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetDashboardStatistics()
+    public async Task<IActionResult> GetDashboard()
     {
-        var dashboardStats = await _dashboardService.GetDashboardStatistics();
+        var dashboard =
+            await _dashboardService.GetDashboardStatistics();
 
         return Ok(new ApiResponse<DashboardStatsDto>
         {
             Success = true,
-            Message = "Dashboard statistics retrieved successfully.",
-            Data = dashboardStats
+            Message = "Dashboard loaded successfully.",
+            Data = dashboard
         });
     }
 }
