@@ -29,9 +29,22 @@ export default function LoginForm() {
       onSuccess: (response) => {
         toast.success("Login successful");
 
-        login(response.accessToken, response.refreshToken);
+        login(
+          response.accessToken,
+          response.refreshToken,
+          response.username,
+          response.role,
+        );
 
-        navigate("/dashboard");
+        if (response.role === "Admin") {
+          navigate("/admin/dashboard");
+        } else if (response.role === "Faculty") {
+          navigate("/teacher/dashboard");
+        } else if (response.role === "Student") {
+          navigate("/student/dashboard");
+        } else {
+          navigate("/login");
+        }
       },
 
       onError: (error) => {

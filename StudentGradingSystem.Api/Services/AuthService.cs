@@ -32,57 +32,61 @@ public class AuthService : IAuthService
 
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
         {
-            return null;    
-        }   
+            return null;
+        }
 
         var accessToken = _jwtTokenGenerator.GenerateToken(user);
 
         var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
         _context.RefreshTokens.Add(new RefreshToken
-    {
-        Token = refreshToken,
-        UserId = user.Id,
-        ExpiresAt = DateTime.UtcNow.AddDays(7),
-         IsRevoked = false
-    });
+        {
+            Token = refreshToken,
+            UserId = user.Id,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            IsRevoked = false
+        });
 
         await _context.SaveChangesAsync();
 
         return new AuthResponseDto
-    {
-        AccessToken = accessToken,
-        RefreshToken = refreshToken
-    };
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            Username = user.Username,
+            Role = user.Role
+        };
     }
 
 
 
     public async Task<AuthResponseDto?> RefreshToken(RefreshTokenRequestDto dto)
-{
-    var refreshToken = await _context.RefreshTokens
-        .Include(r => r.User)
-        .FirstOrDefaultAsync(r =>
-            r.Token == dto.RefreshToken &&
-            !r.IsRevoked);
-
-    if (refreshToken == null)
     {
-        return null;
+        var refreshToken = await _context.RefreshTokens
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r =>
+                r.Token == dto.RefreshToken &&
+                !r.IsRevoked);
+
+        if (refreshToken == null)
+        {
+            return null;
+        }
+
+        if (refreshToken.ExpiresAt < DateTime.UtcNow)
+        {
+            return null;
+        }
+
+        var newAccessToken =
+            _jwtTokenGenerator.GenerateToken(refreshToken.User);
+
+        return new AuthResponseDto
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = refreshToken.Token,
+            Username = refreshToken.User.Username,
+            Role = refreshToken.User.Role
+        };
     }
-
-    if (refreshToken.ExpiresAt < DateTime.UtcNow)
-    {
-        return null;
-    }
-
-    var newAccessToken =
-        _jwtTokenGenerator.GenerateToken(refreshToken.User);
-
-    return new AuthResponseDto
-    {
-        AccessToken = newAccessToken,
-        RefreshToken = refreshToken.Token
-    };
-}
 }

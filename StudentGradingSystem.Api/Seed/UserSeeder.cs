@@ -30,10 +30,23 @@ public static class UserSeeder
             });
         }
 
+        Console.WriteLine("UserSeeder Running");
+
         if (usersToAdd.Count > 0)
         {
             context.Users.AddRange(usersToAdd);
             await context.SaveChangesAsync();
+            Console.WriteLine("Users Added");
+        }
+
+        if (!await context.Users.AnyAsync(u => u.Username == "faculty"))
+        {
+            usersToAdd.Add(new ApplicationUser
+            {
+                Username = "faculty",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("faculty123"),
+                Role = "Faculty"
+            });
         }
     }
 }

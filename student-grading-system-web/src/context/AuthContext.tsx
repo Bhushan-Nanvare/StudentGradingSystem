@@ -1,16 +1,20 @@
 import {
   createContext,
   useContext,
-  useState,
   useEffect,
+  useState,
 } from "react";
 
 interface AuthContextType {
   accessToken: string | null;
+  username: string | null;
+  role: string | null;
 
   login: (
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    username: string,
+    role: string
   ) => void;
 
   logout: () => void;
@@ -31,48 +35,51 @@ export function AuthProvider({
   const [accessToken, setAccessToken] =
     useState<string | null>(null);
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("accessToken");
+  const [username, setUsername] =
+    useState<string | null>(null);
 
-    if (token) {
-      setAccessToken(token);
-    }
+  const [role, setRole] =
+    useState<string | null>(null);
+
+  useEffect(() => {
+    setAccessToken(localStorage.getItem("accessToken"));
+    setUsername(localStorage.getItem("username"));
+    setRole(localStorage.getItem("role"));
   }, []);
 
   const login = (
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    username: string,
+    role: string
   ) => {
-    localStorage.setItem(
-      "accessToken",
-      accessToken
-    );
-
-    localStorage.setItem(
-      "refreshToken",
-      refreshToken
-    );
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("username", username);
+    localStorage.setItem("role", role);
 
     setAccessToken(accessToken);
+    setUsername(username);
+    setRole(role);
   };
 
   const logout = () => {
-    localStorage.removeItem("accessToken");
-
-    localStorage.removeItem("refreshToken");
+    localStorage.clear();
 
     setAccessToken(null);
+    setUsername(null);
+    setRole(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         accessToken,
+        username,
+        role,
         login,
         logout,
-        isAuthenticated:
-          !!accessToken,
+        isAuthenticated: !!accessToken,
       }}
     >
       {children}
@@ -81,8 +88,7 @@ export function AuthProvider({
 }
 
 export function useAuth() {
-  const context =
-    useContext(AuthContext);
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error(
