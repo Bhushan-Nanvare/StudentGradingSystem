@@ -15,7 +15,7 @@ import RoleRoute from "@/components/auth/RoleRoute";
 import TeacherLayout from "@/layouts/TeacherLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import MySubjectsPage from "@/pages/Teacher/MySubjectsPage";
-
+import StudentsPage from "@/pages/Teacher/Students/StudentsPage";
 
 function AppRoutes() {
   return (
@@ -59,6 +59,11 @@ function AppRoutes() {
           <Route path="dashboard" element={<TeacherDashboardPage />} />
 
           <Route path="subjects" element={<MySubjectsPage />} />
+
+          <Route
+            path="subjects/:subjectId/students"
+            element={<StudentsPage />}
+          />
         </Route>
 
         <Route

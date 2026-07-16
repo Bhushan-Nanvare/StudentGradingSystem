@@ -6,3 +6,10 @@ export interface TeacherSubject {
   semester: number;
   departmentName: string;
 }
+
+export interface TeacherStudent {
+  id: number;
+  name: string;
+  departmentName: string;
+  cgpa: number;
+}

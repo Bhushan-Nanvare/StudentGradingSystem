@@ -38,4 +38,30 @@ public class TeacherService : ITeacherService
             })
             .ToListAsync();
     }
+
+
+
+
+    public async Task<List<TeacherStudentDto>> GetStudentsBySubject(int subjectId)
+    {
+        var subject = await _context.Subjects
+            .Include(s => s.Department)
+            .FirstOrDefaultAsync(s => s.Id == subjectId);
+
+        if (subject == null)
+        {
+            return new List<TeacherStudentDto>();
+        }
+
+        return await _context.Students
+            .Where(s => s.DepartmentId == subject.DepartmentId)
+            .Select(s => new TeacherStudentDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                CGPA = s.CGPA,
+                DepartmentName = s.Department.Name
+            })
+            .ToListAsync();
+    }
 }

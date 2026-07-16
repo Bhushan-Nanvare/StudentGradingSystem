@@ -29,4 +29,14 @@ public class TeacherController : ControllerBase
 
         return Ok(subjects);
     }
+
+
+    [HttpGet("subjects/{subjectId}/students")]
+    public async Task<IActionResult> GetStudentsBySubject(int subjectId)
+    {
+        var students =
+            await _teacherService.GetStudentsBySubject(subjectId);
+
+        return Ok(students);
+    }
 }

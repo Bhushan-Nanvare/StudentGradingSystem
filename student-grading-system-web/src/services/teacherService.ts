@@ -6,3 +6,15 @@ export async function getMySubjects(): Promise<TeacherSubject[]> {
 
   return response.data;
 }
+
+export async function getStudentsBySubject(
+  subjectId: number
+) {
+  const response = await api.get(
+    `/teacher/subjects/${subjectId}/students`
+  );
+
+  return response.data;
+}
+
+
