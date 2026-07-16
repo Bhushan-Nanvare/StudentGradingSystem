@@ -17,7 +17,7 @@ export default function MySubjectsPage() {
         <div
           key={subject.id}
           className="rounded-lg border p-4 cursor-pointer hover:bg-gray-50"
-          onClick={() => navigate(`/teacher/subjects/${subject.id}/students`)}
+          onClick={() => navigate(`/teacher/subjects/${subject.id}`)}
         >
           <h2 className="font-semibold">{subject.name}</h2>
 

@@ -37,7 +37,7 @@ builder.Services.AddScoped(typeof(ValidationFilter<>));
 
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
-
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 // JWT Settings
 builder.Services.Configure<JwtSettings>(

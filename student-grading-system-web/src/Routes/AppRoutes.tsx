@@ -16,6 +16,13 @@ import TeacherLayout from "@/layouts/TeacherLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import MySubjectsPage from "@/pages/Teacher/MySubjectsPage";
 import StudentsPage from "@/pages/Teacher/Students/StudentsPage";
+import AttendancePage from "@/pages/Teacher/AttendancePage";
+import SubjectWorkspaceLayout from "@/pages/Teacher/SubjectWorkspace/SubjectWorkspaceLayout";
+import StudentsTab from "@/pages/Teacher/SubjectWorkspace/StudentsTab";
+import AttendanceTab from "@/pages/Teacher/SubjectWorkspace/AttendanceTab";
+import MarksTab from "@/pages/Teacher/SubjectWorkspace/MarksTab";
+import AssignmentsTab from "@/pages/Teacher/SubjectWorkspace/AssignmentsTab";
+import ReportsTab from "@/pages/Teacher/SubjectWorkspace/ReportsTab";
 
 function AppRoutes() {
   return (
@@ -61,9 +68,21 @@ function AppRoutes() {
           <Route path="subjects" element={<MySubjectsPage />} />
 
           <Route
-            path="subjects/:subjectId/students"
-            element={<StudentsPage />}
-          />
+            path="subjects/:subjectId"
+            element={<SubjectWorkspaceLayout />}
+          >
+            <Route index element={<Navigate to="students" replace />} />
+
+            <Route path="students" element={<StudentsTab />} />
+
+            <Route path="attendance" element={<AttendanceTab />} />
+
+            <Route path="marks" element={<MarksTab />} />
+
+            <Route path="assignments" element={<AssignmentsTab />} />
+
+            <Route path="reports" element={<ReportsTab />} />
+          </Route>
         </Route>
 
         <Route
