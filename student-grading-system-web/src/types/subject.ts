@@ -8,6 +8,7 @@ export interface Subject {
   departmentName: string;
   facultyId: number;
   facultyName: string;
+  
 }
 
 export interface CreateSubjectRequest {

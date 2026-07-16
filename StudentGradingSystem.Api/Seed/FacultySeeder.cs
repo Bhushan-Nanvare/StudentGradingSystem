@@ -89,5 +89,20 @@ public static class FacultySeeder
             context.Faculties.AddRange(facultyMembers);
             await context.SaveChangesAsync();
         }
+
+        var facultyUser = await context.Users
+    .FirstOrDefaultAsync(u => u.Username == "faculty");
+
+        var aarav = await context.Faculties
+            .FirstOrDefaultAsync(f => f.EmployeeCode == "FAC-1001");
+
+        if (facultyUser != null &&
+            aarav != null &&
+            aarav.ApplicationUserId == null)
+        {
+            aarav.ApplicationUserId = facultyUser.Id;
+
+            await context.SaveChangesAsync();
+        }
     }
 }

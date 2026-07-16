@@ -15,9 +15,17 @@ public class AppDbContext : DbContext
     public DbSet<ApplicationUser> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Faculty> Faculties { get; set; }
-
     public DbSet<Department> Departments { get; set; }
 
-    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Faculty>()
+            .HasOne(f => f.ApplicationUser)
+            .WithOne(u => u.Faculty)
+            .HasForeignKey<Faculty>(f => f.ApplicationUserId)
+            .OnDelete(DeleteBehavior.SetNull);
+    }
 
 }

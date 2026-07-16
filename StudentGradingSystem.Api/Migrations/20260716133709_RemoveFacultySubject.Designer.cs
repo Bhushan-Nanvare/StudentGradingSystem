@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentGradingSystem.Api.Data;
@@ -11,9 +12,11 @@ using StudentGradingSystem.Api.Data;
 namespace StudentGradingSystem.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260716133709_RemoveFacultySubject")]
+    partial class RemoveFacultySubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +79,6 @@ namespace StudentGradingSystem.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("DepartmentId")
                         .HasColumnType("integer");
 
@@ -109,9 +109,6 @@ namespace StudentGradingSystem.Api.Migrations
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -251,18 +248,11 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Faculty", b =>
                 {
-                    b.HasOne("StudentGradingSystem.Api.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Faculty")
-                        .HasForeignKey("StudentGradingSystem.Api.Models.Faculty", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Faculties")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Department");
                 });
@@ -310,8 +300,6 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Faculty");
-
                     b.Navigation("RefreshTokens");
                 });
 

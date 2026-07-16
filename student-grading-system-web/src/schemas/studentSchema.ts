@@ -19,6 +19,8 @@ export const studentSchema = z.object({
     .number()
     .min(0, "CGPA cannot be negative")
     .max(10, "CGPA cannot exceed 10"),
+
+  facultyId: z.number().min(1, "Faculty is required")
 });
 
 export type StudentFormData = z.infer<typeof studentSchema>;

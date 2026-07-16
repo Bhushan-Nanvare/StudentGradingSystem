@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentGradingSystem.Api.Data;
@@ -11,9 +12,11 @@ using StudentGradingSystem.Api.Data;
 namespace StudentGradingSystem.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260716111915_AddFacultySubject")]
+    partial class AddFacultySubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +79,6 @@ namespace StudentGradingSystem.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("DepartmentId")
                         .HasColumnType("integer");
 
@@ -110,12 +110,32 @@ namespace StudentGradingSystem.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
-
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Faculties");
+                });
+
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.FacultySubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("FacultySubjects");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>
@@ -251,20 +271,32 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Faculty", b =>
                 {
-                    b.HasOne("StudentGradingSystem.Api.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Faculty")
-                        .HasForeignKey("StudentGradingSystem.Api.Models.Faculty", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Faculties")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.FacultySubject", b =>
+                {
+                    b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentGradingSystem.Api.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>
@@ -310,8 +342,6 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Faculty");
-
                     b.Navigation("RefreshTokens");
                 });
 

@@ -60,23 +60,6 @@ public class SubjectController : ControllerBase
         });
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSubject(
-        int id,
-        UpdateSubjectDto dto)
-    {
-        var subject = _mapper.Map<Subject>(dto);
-
-        var updatedSubject =
-            await _subjectService.UpdateSubject(id, subject);
-
-        if (updatedSubject == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(updatedSubject);
-    }
 
     [HttpPost]
     public async Task<IActionResult> AddSubject(CreateSubjectDto dto)
@@ -91,18 +74,23 @@ public class SubjectController : ControllerBase
             subject);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSubject(int id, Subject dto)
+[HttpPut("{id}")]
+public async Task<IActionResult> UpdateSubject(
+    int id,
+    UpdateSubjectDto dto)
+{
+    var subject = _mapper.Map<Subject>(dto);
+
+    var updatedSubject =
+        await _subjectService.UpdateSubject(id, subject);
+
+    if (updatedSubject == null)
     {
-        var subject = await _subjectService.UpdateSubject(id, dto);
-
-        if (subject == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(subject);
+        return NotFound();
     }
+
+    return Ok(updatedSubject);
+}
     //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSubject(int id)

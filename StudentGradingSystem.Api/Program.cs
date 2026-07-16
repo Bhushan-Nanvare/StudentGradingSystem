@@ -43,7 +43,7 @@ builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
 
-    
+
 
 builder.Services.AddSingleton<PasswordHasher>();
 
@@ -91,6 +91,7 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 builder.Services.AddCors(options =>
 {

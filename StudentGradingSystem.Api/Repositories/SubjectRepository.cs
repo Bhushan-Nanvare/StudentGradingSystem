@@ -54,6 +54,8 @@ public class SubjectRepository : ISubjectRepository
 
         subject.SubjectCode = updatedSubject.SubjectCode;
         subject.Name = updatedSubject.Name;
+        subject.DepartmentId = updatedSubject.DepartmentId;
+        subject.FacultyId = updatedSubject.FacultyId;
         subject.Credits = updatedSubject.Credits;
         subject.Semester = updatedSubject.Semester;
         subject.UpdatedAt = DateTime.UtcNow;

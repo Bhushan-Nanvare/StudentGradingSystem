@@ -5,6 +5,7 @@ export interface Student {
   cgpa: number;
   departmentId: number;
   departmentName: string;
+  
 }
 
 export interface CreateStudentRequest {

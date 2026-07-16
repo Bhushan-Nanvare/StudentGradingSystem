@@ -26,4 +26,8 @@ public class Faculty
 
     // One Faculty teaches many Subjects
     public List<Subject> Subjects { get; set; } = new();
+
+    public int? ApplicationUserId { get; set; }
+
+    public ApplicationUser? ApplicationUser { get; set; }
 }

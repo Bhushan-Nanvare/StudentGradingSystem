@@ -15,11 +15,9 @@ public class SubjectProfile : Profile
         CreateMap<Subject, SubjectResponseDto>()
             .ForMember(
                 dest => dest.DepartmentName,
-                opt => opt.MapFrom(src => src.Department.Name)
-            )
+                opt => opt.MapFrom(src => src.Department.Name))
             .ForMember(
                 dest => dest.FacultyName,
-                opt => opt.MapFrom(src => src.Faculty.FirstName + " " + src.Faculty.LastName)
-            );
+                opt => opt.MapFrom(src => src.Faculty.FirstName + " " + src.Faculty.LastName));
     }
 }

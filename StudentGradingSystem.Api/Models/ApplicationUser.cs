@@ -11,4 +11,6 @@ public class ApplicationUser
     public string Role { get; set; } = "Student";
 
     public List<RefreshToken> RefreshTokens { get; set; } = new();
+
+    public Faculty? Faculty { get; set; }
 }

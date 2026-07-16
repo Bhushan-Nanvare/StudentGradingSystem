@@ -17,4 +17,6 @@ public class UpdateSubjectDto
 
     [Range(1, 8)]
     public int Semester { get; set; }
+
+    public int FacultyId { get; set; }
 }

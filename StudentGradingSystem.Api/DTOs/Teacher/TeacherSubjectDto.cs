@@ -1,4 +1,6 @@
-public class SubjectResponseDto
+namespace StudentGradingSystem.Api.DTOs.Teacher;
+
+public class TeacherSubjectDto
 {
     public int Id { get; set; }
 
@@ -10,14 +12,5 @@ public class SubjectResponseDto
 
     public int Semester { get; set; }
 
-    public int DepartmentId { get; set; }
-
     public string DepartmentName { get; set; } = string.Empty;
-
-    public int FacultyId { get; set; }
-
-    public string FacultyName { get; set; } = string.Empty;
-
-
-    
 }
