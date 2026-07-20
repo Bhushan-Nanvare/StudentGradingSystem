@@ -1,12 +1,15 @@
-export interface Attendance {
+export interface StudentAttendance {
   studentId: number;
-  studentName: string;
   isPresent: boolean;
-  date: string;
 }
 
 export interface MarkAttendanceRequest {
-  studentId: number;
   subjectId: number;
+  students: StudentAttendance[];
+}
+
+export interface AttendanceResponse {
+  studentId: number;
+  studentName: string;
   isPresent: boolean;
 }

@@ -9,7 +9,5 @@ public interface IAttendanceService
         MarkAttendanceDto dto);
 
     Task<List<AttendanceResponseDto>>
-        GetAttendance(
-            int subjectId,
-            DateOnly date);
+        GetAttendance(int subjectId);
 }

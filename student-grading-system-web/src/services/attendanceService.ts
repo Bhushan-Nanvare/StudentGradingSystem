@@ -1,25 +1,16 @@
 import api from "@/lib/axios";
-import type {
-  Attendance,
-  MarkAttendanceRequest,
-} from "@/types/attendance";
+import type { MarkAttendanceRequest } from "@/types/attendance";
 
-export async function markAttendance(
+export const markAttendance = async (
   data: MarkAttendanceRequest
-) {
-  await api.post("/attendance", data);
-}
+) => {
+  const res = await api.post("/attendance", data);
+  return res.data;
+};
 
-export async function getAttendance(
-  subjectId: number,
-  date: string
-): Promise<Attendance[]> {
-  const response = await api.get("/attendance", {
-    params: {
-      subjectId,
-      date,
-    },
-  });
-
-  return response.data;
-}
+export const getAttendance = async (
+  subjectId: number
+) => {
+  const res = await api.get(`/attendance/${subjectId}`);
+  return res.data;
+};

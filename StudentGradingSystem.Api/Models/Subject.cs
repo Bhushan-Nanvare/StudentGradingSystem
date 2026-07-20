@@ -36,7 +36,9 @@ public class Subject
 
     public Department Department { get; set; } = null!;
 
-    public int FacultyId { get; set; }
+    public int FacultyId { get; set; } 
 
     public Faculty Faculty { get; set; } = null!;
+
+    public List<StudentSubject> StudentSubjects { get; set; } = [];
 }

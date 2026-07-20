@@ -25,5 +25,7 @@ public class Student
     public string? CreatedBy { get; set; }
 
     public string? UpdatedBy { get; set; }
+
+    public List<StudentSubject> StudentSubjects { get; set; } = [];
 }
 

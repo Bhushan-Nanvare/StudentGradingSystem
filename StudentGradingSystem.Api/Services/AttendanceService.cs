@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.DTOs.Attendance;
 using StudentGradingSystem.Api.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Services;
@@ -16,62 +16,65 @@ public class AttendanceService : IAttendanceService
     }
 
     public async Task MarkAttendance(
-       int facultyUserId,
-       MarkAttendanceDto dto)
+        int facultyUserId,
+        MarkAttendanceDto dto)
     {
         var faculty = await _context.Faculties
             .FirstOrDefaultAsync(f =>
                 f.ApplicationUserId == facultyUserId);
 
         if (faculty == null)
-        {
             return;
-        }
 
-        var existingAttendance = await _context.Attendances
-            .FirstOrDefaultAsync(a =>
-                a.StudentId == dto.StudentId &&
-                a.SubjectId == dto.SubjectId &&
-                a.Date == DateOnly.FromDateTime(DateTime.UtcNow));
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        if (existingAttendance != null)
+        foreach (var student in dto.Students)
         {
-            existingAttendance.IsPresent = dto.IsPresent;
+            var existingAttendance =
+                await _context.Attendances
+                    .FirstOrDefaultAsync(a =>
+                        a.StudentId == student.StudentId &&
+                        a.SubjectId == dto.SubjectId &&
+                        a.Date == today);
 
-            await _context.SaveChangesAsync();
-
-            return;
+            if (existingAttendance != null)
+            {
+                existingAttendance.IsPresent =
+                    student.IsPresent;
+            }
+            else
+            {
+                _context.Attendances.Add(new Attendance
+                {
+                    StudentId = student.StudentId,
+                    SubjectId = dto.SubjectId,
+                    FacultyId = faculty.Id,
+                    Date = today,
+                    IsPresent = student.IsPresent
+                });
+            }
         }
-
-        var attendance = new Attendance
-        {
-            StudentId = dto.StudentId,
-            SubjectId = dto.SubjectId,
-            FacultyId = faculty.Id,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            IsPresent = dto.IsPresent
-        };
-
-        _context.Attendances.Add(attendance);
 
         await _context.SaveChangesAsync();
     }
 
     public async Task<List<AttendanceResponseDto>>
-        GetAttendance(
-            int subjectId,
-            DateOnly date)
+        GetAttendance(int subjectId)
     {
-        return await _context.Attendances
-            .Where(a =>
-                a.SubjectId == subjectId &&
-                a.Date == date)
-            .Select(a => new AttendanceResponseDto
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return await _context.StudentSubjects
+            .Where(ss => ss.SubjectId == subjectId)
+            .Select(ss => new AttendanceResponseDto
             {
-                StudentId = a.StudentId,
-                StudentName = a.Student.Name,
-                IsPresent = a.IsPresent,
-                Date = a.Date
+                StudentId = ss.Student.Id,
+                StudentName = ss.Student.Name,
+
+                IsPresent = _context.Attendances.Any(a =>
+                    a.StudentId == ss.StudentId &&
+                    a.SubjectId == subjectId &&
+                    a.Date == today &&
+                    a.IsPresent)
             })
             .ToListAsync();
     }

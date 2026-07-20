@@ -18,6 +18,14 @@ public class AppDbContext : DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Attendance> Attendances { get; set; }
 
+    public DbSet<StudentSubject> StudentSubjects { get; set; }
+
+    
+
+    public DbSet<Mark> Marks { get; set; }
+
+    public DbSet<Assignment> Assignments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -27,6 +35,23 @@ public class AppDbContext : DbContext
             .WithOne(u => u.Faculty)
             .HasForeignKey<Faculty>(f => f.ApplicationUserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<StudentSubject>()
+            .HasKey(ss => new
+            {
+                ss.StudentId,
+                ss.SubjectId
+            });
+
+        modelBuilder.Entity<StudentSubject>()
+            .HasOne(ss => ss.Student)
+            .WithMany(s => s.StudentSubjects)
+            .HasForeignKey(ss => ss.StudentId);
+
+        modelBuilder.Entity<StudentSubject>()
+            .HasOne(ss => ss.Subject)
+            .WithMany(s => s.StudentSubjects)
+            .HasForeignKey(ss => ss.SubjectId);
     }
 
 }

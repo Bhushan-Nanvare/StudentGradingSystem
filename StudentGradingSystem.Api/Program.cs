@@ -16,6 +16,8 @@ using StudentGradingSystem.Api.Services;
 using StudentGradingSystem.Api.Seed;
 using StudentGradingSystem.Api.Security;
 using StudentGradingSystem.Api.Repositories;
+using StudentGradingSystem.Api.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,8 @@ builder.Services.AddScoped(typeof(ValidationFilter<>));
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IMarkService, MarkService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // JWT Settings
 builder.Services.Configure<JwtSettings>(
@@ -57,6 +61,7 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IAssignmentService, AssignmentService>();
 // JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

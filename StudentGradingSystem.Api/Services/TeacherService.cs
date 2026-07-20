@@ -53,15 +53,15 @@ public class TeacherService : ITeacherService
             return new List<TeacherStudentDto>();
         }
 
-        return await _context.Students
-            .Where(s => s.DepartmentId == subject.DepartmentId)
-            .Select(s => new TeacherStudentDto
-            {
-                Id = s.Id,
-                Name = s.Name,
-                CGPA = s.CGPA,
-                DepartmentName = s.Department.Name
-            })
-            .ToListAsync();
+        return await _context.StudentSubjects
+    .Where(ss => ss.SubjectId == subjectId)
+    .Select(ss => new TeacherStudentDto
+    {
+        Id = ss.Student.Id,
+        Name = ss.Student.Name,
+        CGPA = ss.Student.CGPA,
+        DepartmentName = ss.Student.Department.Name
+    })
+    .ToListAsync();
     }
 }

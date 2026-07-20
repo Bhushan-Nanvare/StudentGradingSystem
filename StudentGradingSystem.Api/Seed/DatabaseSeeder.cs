@@ -11,5 +11,10 @@ public static class DatabaseSeeder
         await FacultySeeder.SeedAsync(context);
         await SubjectSeeder.SeedAsync(context);
         await StudentSeeder.SeedAsync(context);
+
+        await StudentSubjectSeeder.SeedAsync(context);
+
+        await StudentSeeder.SeedAsync(context);
+        await StudentSubjectSeeder.SeedAsync(context);
     }
 }

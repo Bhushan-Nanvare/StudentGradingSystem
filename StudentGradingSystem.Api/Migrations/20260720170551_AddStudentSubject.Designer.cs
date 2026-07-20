@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StudentGradingSystem.Api.Data;
@@ -11,9 +12,11 @@ using StudentGradingSystem.Api.Data;
 namespace StudentGradingSystem.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260720170551_AddStudentSubject")]
+    partial class AddStudentSubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,48 +48,6 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("StudentGradingSystem.Api.Models.Assignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateOnly>("DueDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("FacultyId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("MaxMarks")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacultyId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Assignments");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Attendance", b =>
@@ -195,47 +156,6 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Faculties");
-                });
-
-            modelBuilder.Entity("StudentGradingSystem.Api.Models.Mark", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AssessmentType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("FacultyId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("MarksObtained")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("MaxMarks")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacultyId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Marks");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>
@@ -384,25 +304,6 @@ namespace StudentGradingSystem.Api.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("StudentGradingSystem.Api.Models.Assignment", b =>
-                {
-                    b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
-                        .WithMany()
-                        .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentGradingSystem.Api.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Attendance", b =>
                 {
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
@@ -446,33 +347,6 @@ namespace StudentGradingSystem.Api.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("StudentGradingSystem.Api.Models.Mark", b =>
-                {
-                    b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
-                        .WithMany()
-                        .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentGradingSystem.Api.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentGradingSystem.Api.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>

@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { deleteAssignment } from "@/services/assignmentService";
+import { createAssignment } from "@/services/assignmentService";
 
-export function useDeleteAssignment() {
+export function useCreateAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteAssignment,
+    mutationFn: createAssignment,
 
     onSuccess: () => {
-      toast.success("Assignment deleted.");
+      toast.success("Assignment created.");
 
       queryClient.invalidateQueries({
         queryKey: ["assignments"],
@@ -18,7 +18,7 @@ export function useDeleteAssignment() {
     },
 
     onError: () => {
-      toast.error("Failed to delete assignment.");
+      toast.error("Failed to create assignment.");
     },
   });
 }
