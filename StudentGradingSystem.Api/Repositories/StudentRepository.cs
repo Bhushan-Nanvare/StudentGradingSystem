@@ -19,9 +19,9 @@ public class StudentRepository : IStudentRepository
     {
         IQueryable<Student> query = _context.Students
             .Include(student => student.Department)
+            .Include(student => student.ApplicationUser)
             .Where(student => !student.IsDeleted);
 
-        // Filtering
         if (!string.IsNullOrWhiteSpace(filter.Name))
         {
             query = query.Where(student =>
@@ -46,7 +46,6 @@ public class StudentRepository : IStudentRepository
                 student.CGPA <= filter.MaxCGPA.Value);
         }
 
-        // Sorting
         query = filter.SortBy?.ToLower() switch
         {
             "name" => filter.Descending
@@ -58,8 +57,8 @@ public class StudentRepository : IStudentRepository
                 : query.OrderBy(student => student.Age),
 
             "department" => filter.Descending
-                ? query.OrderByDescending(student => student.Department)
-                : query.OrderBy(student => student.Department),
+                ? query.OrderByDescending(student => student.Department.Name)
+                : query.OrderBy(student => student.Department.Name),
 
             "cgpa" => filter.Descending
                 ? query.OrderByDescending(student => student.CGPA)
@@ -70,7 +69,6 @@ public class StudentRepository : IStudentRepository
                 : query.OrderBy(student => student.Id)
         };
 
-        // Pagination
         return await query
             .Skip((filter.PageNumber - 1) * filter.PageSize)
             .Take(filter.PageSize)
@@ -81,6 +79,7 @@ public class StudentRepository : IStudentRepository
     {
         return await _context.Students
             .Include(student => student.Department)
+            .Include(student => student.ApplicationUser)
             .FirstOrDefaultAsync(student =>
                 student.Id == id &&
                 !student.IsDeleted);
@@ -88,9 +87,11 @@ public class StudentRepository : IStudentRepository
 
     public async Task AddStudent(Student student)
     {
-        _context.Students.Add(student);
         student.CreatedAt = DateTime.UtcNow;
         student.CreatedBy = "System";
+
+        _context.Students.Add(student);
+
         await _context.SaveChangesAsync();
     }
 
@@ -99,15 +100,13 @@ public class StudentRepository : IStudentRepository
         var student = await _context.Students.FindAsync(id);
 
         if (student == null)
-        {
             return null;
-        }
 
         student.Name = updatedStudent.Name;
         student.Age = updatedStudent.Age;
-        student.Department = updatedStudent.Department;
+        student.DepartmentId = updatedStudent.DepartmentId;
+        student.RollNumber = updatedStudent.RollNumber;
         student.CGPA = updatedStudent.CGPA;
-
 
         student.UpdatedAt = DateTime.UtcNow;
         student.UpdatedBy = "System";
@@ -122,14 +121,10 @@ public class StudentRepository : IStudentRepository
         var student = await _context.Students.FindAsync(id);
 
         if (student == null)
-        {
             return false;
-        }
 
         student.IsDeleted = true;
         student.DeletedAt = DateTime.UtcNow;
-
-        
 
         await _context.SaveChangesAsync();
 

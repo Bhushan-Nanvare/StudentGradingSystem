@@ -1,6 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useMyStudents } from "@/hooks/useMyStudents";
 
+type Student = {
+  id: number;
+  name: string;
+  departmentName: string;
+  cgpa: number;
+};
+
 export default function StudentsPage() {
   const { subjectId } = useParams();
   const navigate = useNavigate();
@@ -13,26 +20,22 @@ export default function StudentsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">
-        Students
-      </h1>
+      <h1 className="text-2xl font-bold">Students</h1>
 
       <table className="w-full border">
         <thead className="bg-gray-100">
           <tr>
-            <th className="p-3 border">Name</th>
-            <th className="p-3 border">Department</th>
-            <th className="p-3 border">CGPA</th>
-            <th className="p-3 border">Action</th>
+            <th className="border p-3">Name</th>
+            <th className="border p-3">Department</th>
+            <th className="border p-3">CGPA</th>
+            <th className="border p-3">Action</th>
           </tr>
         </thead>
 
         <tbody>
-          {data?.map((student) => (
+          {(data as Student[] | undefined)?.map((student) => (
             <tr key={student.id}>
-              <td className="border p-3">
-                {student.name}
-              </td>
+              <td className="border p-3">{student.name}</td>
 
               <td className="border p-3">
                 {student.departmentName}
@@ -46,9 +49,7 @@ export default function StudentsPage() {
                 <button
                   className="rounded bg-blue-600 px-3 py-2 text-white"
                   onClick={() =>
-                    navigate(
-                      `/teacher/subjects/${subjectId}`
-                    )
+                    navigate(`/teacher/subjects/${subjectId}`)
                   }
                 >
                   Take Attendance

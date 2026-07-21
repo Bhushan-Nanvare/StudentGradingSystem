@@ -28,6 +28,7 @@ export default function StudentFormFields({
 
   return (
     <div className="space-y-4">
+      {/* Name */}
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
         <Input
@@ -43,6 +44,40 @@ export default function StudentFormFields({
         )}
       </div>
 
+      {/* Roll Number */}
+      <div className="space-y-2">
+        <Label htmlFor="rollNumber">Roll Number</Label>
+        <Input
+          id="rollNumber"
+          placeholder="CS24001"
+          disabled={disabled}
+          {...form.register("rollNumber")}
+        />
+        {form.formState.errors.rollNumber && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.rollNumber.message}
+          </p>
+        )}
+      </div>
+
+      {/* Email */}
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="student@example.com"
+          disabled={disabled}
+          {...form.register("email")}
+        />
+        {form.formState.errors.email && (
+          <p className="text-sm text-red-500">
+            {form.formState.errors.email.message}
+          </p>
+        )}
+      </div>
+
+      {/* Age + CGPA */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="age">Age</Label>
@@ -51,9 +86,10 @@ export default function StudentFormFields({
             type="number"
             min="1"
             max="100"
-            placeholder="Age"
             disabled={disabled}
-            {...form.register("age", { valueAsNumber: true })}
+            {...form.register("age", {
+              valueAsNumber: true,
+            })}
           />
           {form.formState.errors.age && (
             <p className="text-sm text-red-500">
@@ -70,9 +106,10 @@ export default function StudentFormFields({
             step="0.01"
             min="0"
             max="10"
-            placeholder="CGPA"
             disabled={disabled}
-            {...form.register("cgpa", { valueAsNumber: true })}
+            {...form.register("cgpa", {
+              valueAsNumber: true,
+            })}
           />
           {form.formState.errors.cgpa && (
             <p className="text-sm text-red-500">
@@ -82,39 +119,43 @@ export default function StudentFormFields({
         </div>
       </div>
 
+      {/* Department */}
       <div className="space-y-2">
-        <Label htmlFor="department">Department</Label>
+        <Label>Department</Label>
+
         <Select
           value={selectedDepartment}
           disabled={disabled}
           onValueChange={(value) => {
             form.setValue("departmentId", Number(value), {
-              shouldDirty: true,
               shouldValidate: true,
+              shouldDirty: true,
             });
           }}
         >
-          <SelectTrigger id="department" className="w-full">
+          <SelectTrigger>
             <SelectValue placeholder="Select Department" />
           </SelectTrigger>
+
           <SelectContent>
             {departmentsLoading && (
               <SelectItem value="loading" disabled>
-                Loading departments...
+                Loading...
               </SelectItem>
             )}
-            {!departmentsLoading && departments.length === 0 && (
-              <SelectItem value="empty" disabled>
-                No departments available
-              </SelectItem>
-            )}
-            {departments.map((department) => (
-              <SelectItem key={department.id} value={department.id.toString()}>
-                {department.name}
-              </SelectItem>
-            ))}
+
+            {!departmentsLoading &&
+              departments.map((department) => (
+                <SelectItem
+                  key={department.id}
+                  value={department.id.toString()}
+                >
+                  {department.name}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
+
         {form.formState.errors.departmentId && (
           <p className="text-sm text-red-500">
             {form.formState.errors.departmentId.message}

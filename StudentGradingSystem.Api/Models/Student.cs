@@ -12,6 +12,10 @@ public class Student
 
     public Department Department { get; set; } = null!;
 
+    public int? ApplicationUserId { get; set; }
+
+    public ApplicationUser? ApplicationUser { get; set; }
+
     public double CGPA { get; set; }
 
     public bool IsDeleted { get; set; } = false;
@@ -27,5 +31,16 @@ public class Student
     public string? UpdatedBy { get; set; }
 
     public List<StudentSubject> StudentSubjects { get; set; } = [];
+
+    public ICollection<AssignmentSubmission> AssignmentSubmissions { get; set; }
+    = new List<AssignmentSubmission>();
+
+
+    public string RollNumber { get; set; } = string.Empty;
+
+
+
+
+    
 }
 

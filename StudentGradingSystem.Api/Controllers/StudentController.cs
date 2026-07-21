@@ -1,17 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using StudentGradingSystem.Api.Common;
 using StudentGradingSystem.Api.DTOs;
 using StudentGradingSystem.Api.DTOs.Common;
 using StudentGradingSystem.Api.Filters;
 using StudentGradingSystem.Api.Interfaces;
-using StudentGradingSystem.Api.Models;
-using Microsoft.AspNetCore.Authorization;
+
 namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/students")]
-//[Authorize]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;
@@ -29,14 +27,15 @@ public class StudentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddStudent(CreateStudentDto dto)
     {
-        Student student = _mapper.Map<Student>(dto);
+        await _studentService.AddStudent(dto);
 
-        await _studentService.AddStudent(student);
-
-        return CreatedAtAction(
-            nameof(GetStudentById),
-            new { id = student.Id },
-            student);
+        return Ok(new ApiResponse<object>
+        {
+            Success = true,
+            Message = "Student created successfully.",
+            Data = null,
+            Errors = null
+        });
     }
 
     [HttpGet]
@@ -48,8 +47,7 @@ public class StudentController : ControllerBase
         {
             Success = true,
             Message = "Students retrieved successfully.",
-            Data = students,
-            Errors = null
+            Data = students
         });
     }
 
@@ -63,9 +61,7 @@ public class StudentController : ControllerBase
             return NotFound(new ApiResponse<StudentResponseDto>
             {
                 Success = false,
-                Message = "Student not found.",
-                Data = null,
-                Errors = null
+                Message = "Student not found."
             });
         }
 
@@ -73,37 +69,34 @@ public class StudentController : ControllerBase
         {
             Success = true,
             Message = "Student retrieved successfully.",
-            Data = student,
-            Errors = null
+            Data = student
         });
     }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto dto)
     {
-        Student student = _mapper.Map<Student>(dto);
+        var student = _mapper.Map<StudentGradingSystem.Api.Models.Student>(dto);
 
         var updatedStudent = await _studentService.UpdateStudent(id, student);
 
         if (updatedStudent == null)
         {
-            return NotFound(new ApiResponse<Student>
+            return NotFound(new ApiResponse<object>
             {
                 Success = false,
-                Message = "Student not found.",
-                Data = null,
-                Errors = null
+                Message = "Student not found."
             });
         }
 
-        return Ok(new ApiResponse<Student>
+        return Ok(new ApiResponse<StudentGradingSystem.Api.Models.Student>
         {
             Success = true,
             Message = "Student updated successfully.",
-            Data = updatedStudent,
-            Errors = null
+            Data = updatedStudent
         });
     }
-    //[Authorize(Roles = "Admin")]
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(int id)
     {
@@ -114,18 +107,14 @@ public class StudentController : ControllerBase
             return NotFound(new ApiResponse<object>
             {
                 Success = false,
-                Message = "Student not found.",
-                Data = null,
-                Errors = null
+                Message = "Student not found."
             });
         }
 
-            return Ok(new ApiResponse<object>
+        return Ok(new ApiResponse<object>
         {
             Success = true,
-            Message = "Student deleted successfully.",
-            Data = null,
-            Errors = null
+            Message = "Student deleted successfully."
         });
     }
 }

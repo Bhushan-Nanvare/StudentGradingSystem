@@ -24,4 +24,7 @@ public class Assignment
     public decimal MaxMarks { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public ICollection<AssignmentSubmission> Submissions { get; set; }
+    = new List<AssignmentSubmission>();
 }

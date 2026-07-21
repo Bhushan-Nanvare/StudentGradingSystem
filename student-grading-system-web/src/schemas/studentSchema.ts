@@ -11,6 +11,14 @@ export const studentSchema = z.object({
     .min(1, "Age must be at least 1")
     .max(100, "Age cannot exceed 100"),
 
+  rollNumber: z
+    .string()
+    .min(1, "Roll Number is required"),
+
+  email: z
+    .string()
+    .email("Invalid email address"),
+
   departmentId: z
     .number()
     .min(1, "Please select a department"),
@@ -20,7 +28,7 @@ export const studentSchema = z.object({
     .min(0, "CGPA cannot be negative")
     .max(10, "CGPA cannot exceed 10"),
 
-  facultyId: z.number().min(1, "Faculty is required")
+  facultyId: z.number().optional(),
 });
 
 export type StudentFormData = z.infer<typeof studentSchema>;

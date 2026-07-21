@@ -30,6 +30,10 @@ namespace StudentGradingSystem.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
@@ -87,6 +91,48 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.AssignmentSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<decimal?>("Marks")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("AssignmentSubmissions");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Attendance", b =>
@@ -277,6 +323,9 @@ namespace StudentGradingSystem.Api.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("integer");
+
                     b.Property<double>("CGPA")
                         .HasColumnType("double precision");
 
@@ -299,6 +348,10 @@ namespace StudentGradingSystem.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RollNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -306,6 +359,9 @@ namespace StudentGradingSystem.Api.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -403,6 +459,25 @@ namespace StudentGradingSystem.Api.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.AssignmentSubmission", b =>
+                {
+                    b.HasOne("StudentGradingSystem.Api.Models.Assignment", "Assignment")
+                        .WithMany("Submissions")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentGradingSystem.Api.Models.Student", "Student")
+                        .WithMany("AssignmentSubmissions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Attendance", b =>
                 {
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
@@ -488,11 +563,18 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Student", b =>
                 {
+                    b.HasOne("StudentGradingSystem.Api.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("Student")
+                        .HasForeignKey("StudentGradingSystem.Api.Models.Student", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Students")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Department");
                 });
@@ -540,6 +622,13 @@ namespace StudentGradingSystem.Api.Migrations
                     b.Navigation("Faculty");
 
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.Assignment", b =>
+                {
+                    b.Navigation("Submissions");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Department", b =>
@@ -558,6 +647,8 @@ namespace StudentGradingSystem.Api.Migrations
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.Student", b =>
                 {
+                    b.Navigation("AssignmentSubmissions");
+
                     b.Navigation("StudentSubjects");
                 });
 

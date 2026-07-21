@@ -13,9 +13,15 @@ public class CreateStudentDto
     [Required]
     public int DepartmentId { get; set; }
 
+    [Required]
+    public string RollNumber { get; set; } = "";
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = "";
+
     [Range(0, 10)]
     public double CGPA { get; set; }
 
-    [Required]
     public int FacultyId { get; set; }
 }

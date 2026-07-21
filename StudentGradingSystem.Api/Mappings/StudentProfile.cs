@@ -8,7 +8,6 @@ public class StudentProfile : Profile
 {
     public StudentProfile()
     {
-        // Student
         CreateMap<CreateStudentDto, Student>();
 
         CreateMap<UpdateStudentDto, Student>();
@@ -16,9 +15,14 @@ public class StudentProfile : Profile
         CreateMap<Student, StudentResponseDto>()
             .ForMember(
                 dest => dest.DepartmentName,
-                opt => opt.MapFrom(src => src.Department.Name));
+                opt => opt.MapFrom(src => src.Department.Name))
+            .ForMember(
+                dest => dest.Email,
+                opt => opt.MapFrom(src =>
+                    src.ApplicationUser != null
+                        ? src.ApplicationUser.Email
+                        : string.Empty));
 
-        // Department
         CreateMap<CreateDepartmentDto, Department>();
 
         CreateMap<UpdateDepartmentDto, Department>();

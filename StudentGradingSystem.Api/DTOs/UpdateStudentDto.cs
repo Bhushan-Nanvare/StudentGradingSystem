@@ -11,7 +11,14 @@ public class UpdateStudentDto
     public int Age { get; set; }
 
     [Required]
-    public string Department { get; set; } = "";
+    public int DepartmentId { get; set; }
+
+    [Required]
+    public string RollNumber { get; set; } = "";
+
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = "";
 
     [Range(0, 10)]
     public double CGPA { get; set; }

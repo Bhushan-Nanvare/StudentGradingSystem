@@ -1,10 +1,8 @@
 using StudentGradingSystem.Api.DTOs;
-using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.DTOs.Common;
+using StudentGradingSystem.Api.Models;
+
 namespace StudentGradingSystem.Api.Interfaces;
-
-
-
 
 public interface IStudentService
 {
@@ -12,7 +10,7 @@ public interface IStudentService
 
     Task<StudentResponseDto?> GetStudentById(int id);
 
-    Task AddStudent(Student student);
+    Task AddStudent(CreateStudentDto dto);
 
     Task<Student?> UpdateStudent(int id, Student dto);
 

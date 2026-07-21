@@ -1,7 +1,21 @@
-import { navigation } from "@/data/navigation";
+import {
+  adminNavigation,
+  teacherNavigation,
+  studentNavigation,
+} from "@/data/navigation";
+
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
+  const role = localStorage.getItem("role");
+
+  const navigation =
+    role === "Admin"
+      ? adminNavigation
+      : role === "Faculty"
+      ? teacherNavigation
+      : studentNavigation;
+
   return (
     <aside className="w-64 bg-slate-900 text-white">
       <div className="p-6">

@@ -29,19 +29,34 @@ export default function AddStudentDialog({
     defaultValues: {
       name: "",
       age: 18,
+      rollNumber: "",
+      email: "",
       cgpa: 0,
       departmentId: 0,
+      facultyId: 0,
     },
   });
 
   const { mutate, isPending } = useCreateStudent();
-  const { data: departments = [], isLoading: departmentsLoading } = useDepartments();
+
+  const {
+    data: departments = [],
+    isLoading: departmentsLoading,
+  } = useDepartments();
 
   const handleSubmit = (data: StudentFormData) => {
     mutate(data, {
       onSuccess: () => {
         toast.success("Student added successfully");
-        form.reset();
+        form.reset({
+          name: "",
+          age: 18,
+          rollNumber: "",
+          email: "",
+          cgpa: 0,
+          departmentId: 0,
+          facultyId: 0,
+        });
         onOpenChange(false);
       },
       onError: (error) => {
@@ -56,8 +71,16 @@ export default function AddStudentDialog({
       onOpenChange={(value) => {
         if (!isPending) {
           onOpenChange(value);
+
           if (!value) {
-            form.reset();
+            form.reset({
+              name: "",
+              age: 18,
+              rollNumber: "",
+              email: "",
+              cgpa: 0,
+              departmentId: 0,
+            });
           }
         }
       }}
@@ -67,7 +90,10 @@ export default function AddStudentDialog({
           <DialogTitle>Add Student</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-4"
+        >
           <StudentFormFields
             form={form}
             departments={departments}
@@ -87,6 +113,7 @@ export default function AddStudentDialog({
             >
               Cancel
             </Button>
+
             <Button type="submit" disabled={isPending}>
               {isPending ? "Adding Student..." : "Add Student"}
             </Button>

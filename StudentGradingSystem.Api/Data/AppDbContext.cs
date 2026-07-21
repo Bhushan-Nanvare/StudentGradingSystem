@@ -20,7 +20,10 @@ public class AppDbContext : DbContext
 
     public DbSet<StudentSubject> StudentSubjects { get; set; }
 
-    
+    public DbSet<AssignmentSubmission> AssignmentSubmissions =>
+    Set<AssignmentSubmission>();
+
+
 
     public DbSet<Mark> Marks { get; set; }
 
@@ -35,6 +38,12 @@ public class AppDbContext : DbContext
             .WithOne(u => u.Faculty)
             .HasForeignKey<Faculty>(f => f.ApplicationUserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Student>()
+.HasOne(s => s.ApplicationUser)
+.WithOne(u => u.Student)
+.HasForeignKey<Student>(s => s.ApplicationUserId)
+.OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<StudentSubject>()
             .HasKey(ss => new
@@ -53,5 +62,7 @@ public class AppDbContext : DbContext
             .WithMany(s => s.StudentSubjects)
             .HasForeignKey(ss => ss.SubjectId);
     }
+
+
 
 }
