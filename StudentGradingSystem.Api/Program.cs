@@ -8,7 +8,6 @@ using StudentGradingSystem.Api.Authentication;
 using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.Extensions;
 using StudentGradingSystem.Api.Filters;
-using StudentGradingSystem.Api.Mappings;
 using StudentGradingSystem.Api.Middleware;
 using StudentGradingSystem.Api.Validators;
 using StudentGradingSystem.Api.Interfaces;
@@ -18,6 +17,7 @@ using StudentGradingSystem.Api.Security;
 using StudentGradingSystem.Api.Repositories;
 using StudentGradingSystem.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,35 +37,47 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateStudentValidator>();
 // Validation Filter
 builder.Services.AddScoped(typeof(ValidationFilter<>));
 
+// Repositories
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IMarkRepository, MarkRepository>();
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IAssignmentSubmissionRepository, AssignmentSubmissionRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IStudentPortalRepository, StudentPortalRepository>();
+builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+builder.Services.AddScoped<ICgpaRepository, CgpaRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
+// Services
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IFacultyService, FacultyService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IMarkService, MarkService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IAssignmentService, AssignmentService>();
+builder.Services.AddScoped<IAssignmentSubmissionService, AssignmentSubmissionService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFacultyPortalService, FacultyPortalService>();
+builder.Services.AddScoped<IStudentPortalService, StudentPortalService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+builder.Services.AddScoped<ICgpaService, CgpaService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // JWT Settings
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
 
-
-
 builder.Services.AddSingleton<PasswordHasher>();
 
-builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
-
-builder.Services.AddScoped<IFacultyService, FacultyService>();
-
-builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
-builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-
-builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<IAssignmentService, AssignmentService>();
-
-builder.Services.AddScoped<
-    IAssignmentSubmissionService,
-    AssignmentSubmissionService>();
 // JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -99,10 +111,6 @@ builder.Services.AddScoped<JwtTokenGenerator>();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITeacherService, TeacherService>();
-
-builder.Services.AddScoped<IStudentPortalService, StudentPortalService>();
 
 builder.Services.AddCors(options =>
 {

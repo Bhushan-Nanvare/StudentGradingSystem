@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentGradingSystem.Api.Common;
 using StudentGradingSystem.Api.DTOs.Dashboard;
@@ -7,7 +8,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/dashboard")]
-//[Authorize]
+[Authorize(Roles = "Admin")]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;

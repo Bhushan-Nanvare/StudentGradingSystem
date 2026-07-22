@@ -13,4 +13,6 @@ public interface IFacultyRepository
     Task<Faculty?> UpdateFaculty(int id, Faculty faculty);
 
     Task<bool> DeleteFaculty(int id);
+
+    Task<Faculty?> GetFacultyByApplicationUserIdAsync(int applicationUserId);
 }

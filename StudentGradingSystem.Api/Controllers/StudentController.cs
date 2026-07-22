@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentGradingSystem.Api.Common;
 using StudentGradingSystem.Api.DTOs;
@@ -10,6 +11,7 @@ namespace StudentGradingSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/students")]
+[Authorize(Roles = "Admin")]
 public class StudentController : ControllerBase
 {
     private readonly IStudentService _studentService;

@@ -13,17 +13,20 @@ namespace StudentGradingSystem.Api.Services;
 public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
+    private readonly IApplicationUserRepository _userRepository;
     private readonly ILogger<StudentService> _logger;
     private readonly IMapper _mapper;
     private readonly AppDbContext _context;
 
     public StudentService(
         IStudentRepository studentRepository,
+        IApplicationUserRepository userRepository,
         ILogger<StudentService> logger,
         IMapper mapper,
         AppDbContext context)
     {
         _studentRepository = studentRepository;
+        _userRepository = userRepository;
         _logger = logger;
         _mapper = mapper;
         _context = context;
@@ -55,22 +58,19 @@ public class StudentService : IStudentService
 
         try
         {
-            if (await _context.Users.AnyAsync(x => x.Username == dto.RollNumber))
+            if (await _userRepository.ExistsByUsernameAsync(dto.RollNumber))
                 throw new Exception("Roll Number already exists.");
 
-            if (await _context.Users.AnyAsync(x => x.Email == dto.Email))
+            if (await _userRepository.ExistsByEmailAsync(dto.Email))
                 throw new Exception("Email already exists.");
 
-            var user = new ApplicationUser
+            var user = await _userRepository.AddAsync(new ApplicationUser
             {
                 Username = dto.RollNumber,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.RollNumber),
                 Role = "Student"
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            });
 
             var student = new Student
             {

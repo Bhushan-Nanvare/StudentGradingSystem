@@ -44,6 +44,7 @@ public class StudentPortalController : ControllerBase
 
         return Ok(await _service.GetSubjects(userId));
     }
+
     [HttpGet("attendance")]
     public async Task<IActionResult> Attendance()
     {
@@ -52,6 +53,7 @@ public class StudentPortalController : ControllerBase
 
         return Ok(await _service.GetAttendance(userId));
     }
+
     [HttpGet("marks")]
     public async Task<IActionResult> Marks()
     {
@@ -61,4 +63,12 @@ public class StudentPortalController : ControllerBase
         return Ok(await _service.GetMarks(userId));
     }
 
-}
+    [HttpGet("assignments")]
+    public async Task<IActionResult> Assignments()
+    {
+        int userId = int.Parse(
+            User.FindFirst(JwtRegisteredClaimNames.Sub)!.Value);
+
+        return Ok(await _service.GetAssignments(userId));
+    }
+}

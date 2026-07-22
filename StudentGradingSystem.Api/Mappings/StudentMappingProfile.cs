@@ -4,9 +4,9 @@ using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Mappings;
 
-public class StudentProfile : Profile
+public class StudentMappingProfile : Profile
 {
-    public StudentProfile()
+    public StudentMappingProfile()
     {
         CreateMap<CreateStudentDto, Student>();
 
@@ -22,13 +22,5 @@ public class StudentProfile : Profile
                     src.ApplicationUser != null
                         ? src.ApplicationUser.Email
                         : string.Empty));
-
-        CreateMap<CreateDepartmentDto, Department>();
-
-        CreateMap<UpdateDepartmentDto, Department>();
-
-        CreateMap<Department, CreateDepartmentDto>();
-
-        CreateMap<Department, UpdateDepartmentDto>();
     }
 }

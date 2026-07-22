@@ -284,6 +284,42 @@ namespace StudentGradingSystem.Api.Migrations
                     b.ToTable("Marks");
                 });
 
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -445,7 +481,7 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
                         .WithMany()
                         .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StudentGradingSystem.Api.Models.Subject", "Subject")
@@ -483,7 +519,7 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
                         .WithMany()
                         .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StudentGradingSystem.Api.Models.Student", "Student")
@@ -515,7 +551,7 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Faculties")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
@@ -528,7 +564,7 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
                         .WithMany()
                         .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StudentGradingSystem.Api.Models.Student", "Student")
@@ -548,6 +584,17 @@ namespace StudentGradingSystem.Api.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("StudentGradingSystem.Api.Models.Notification", b =>
+                {
+                    b.HasOne("StudentGradingSystem.Api.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StudentGradingSystem.Api.Models.RefreshToken", b =>
@@ -571,7 +618,7 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Students")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
@@ -603,13 +650,13 @@ namespace StudentGradingSystem.Api.Migrations
                     b.HasOne("StudentGradingSystem.Api.Models.Department", "Department")
                         .WithMany("Subjects")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StudentGradingSystem.Api.Models.Faculty", "Faculty")
                         .WithMany("Subjects")
                         .HasForeignKey("FacultyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");

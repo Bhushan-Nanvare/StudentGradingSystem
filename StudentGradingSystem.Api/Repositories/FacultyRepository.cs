@@ -73,4 +73,12 @@ public class FacultyRepository : IFacultyRepository
 
         return true;
     }
+
+    public async Task<Faculty?> GetFacultyByApplicationUserIdAsync(
+        int applicationUserId)
+    {
+        return await _context.Faculties
+            .FirstOrDefaultAsync(f =>
+                f.ApplicationUserId == applicationUserId);
+    }
 }

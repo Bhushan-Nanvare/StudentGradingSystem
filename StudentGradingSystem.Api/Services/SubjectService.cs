@@ -1,4 +1,5 @@
 using StudentGradingSystem.Api.DTOs;
+using StudentGradingSystem.Api.DTOs.Subject;
 using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Models;
 using StudentGradingSystem.Api.Exceptions;
@@ -24,17 +25,17 @@ public class SubjectService : ISubjectService
         return await _subjectRepository.GetSubjectById(id);
     }
 
-public async Task AddSubject(Subject subject)
-{
-    var existingSubject = await _subjectRepository.GetBySubjectCode(subject.SubjectCode);
-
-    if (existingSubject != null)
+    public async Task AddSubject(Subject subject)
     {
-        throw new DuplicateSubjectCodeException(subject.SubjectCode);;
-    }
+        var existingSubject = await _subjectRepository.GetBySubjectCode(subject.SubjectCode);
 
-    await _subjectRepository.AddSubject(subject);
-}
+        if (existingSubject != null)
+        {
+            throw new DuplicateSubjectCodeException(subject.SubjectCode);;
+        }
+
+        await _subjectRepository.AddSubject(subject);
+    }
 
     public async Task<Subject?> UpdateSubject(int id, Subject dto)
     {
@@ -45,4 +46,29 @@ public async Task AddSubject(Subject subject)
     {
         return await _subjectRepository.DeleteSubject(id);
     }
-}
+
+    public async Task<List<StudentEnrolledDto>> GetEnrolledStudentsAsync(int subjectId)
+    {
+        return await _subjectRepository.GetEnrolledStudentsAsync(subjectId);
+    }
+
+    public async Task<List<StudentEnrolledDto>> GetAvailableStudentsAsync(int subjectId)
+    {
+        return await _subjectRepository.GetAvailableStudentsAsync(subjectId);
+    }
+
+    public async Task EnrollStudentsAsync(int subjectId, List<int> studentIds)
+    {
+        await _subjectRepository.EnrollStudentsAsync(subjectId, studentIds);
+    }
+
+    public async Task<bool> UnenrollStudentAsync(int subjectId, int studentId)
+    {
+        return await _subjectRepository.UnenrollStudentAsync(subjectId, studentId);
+    }
+
+    public async Task<bool> AssignFacultyAsync(int subjectId, int facultyId)
+    {
+        return await _subjectRepository.AssignFacultyAsync(subjectId, facultyId);
+    }
+}

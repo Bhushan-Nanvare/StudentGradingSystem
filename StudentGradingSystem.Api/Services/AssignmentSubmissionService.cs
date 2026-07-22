@@ -1,21 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.DTOs.AssignmentSubmission;
-using StudentGradingSystem.Api.Models;
+using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Services.Interfaces;
+using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Services;
 
 public class AssignmentSubmissionService : IAssignmentSubmissionService
 {
-    private readonly AppDbContext _context;
+    private readonly IAssignmentSubmissionRepository _repository;
     private readonly IWebHostEnvironment _environment;
 
     public AssignmentSubmissionService(
-        AppDbContext context,
+        IAssignmentSubmissionRepository repository,
         IWebHostEnvironment environment)
     {
-        _context = context;
+        _repository = repository;
         _environment = environment;
     }
 
@@ -44,37 +43,20 @@ public class AssignmentSubmissionService : IAssignmentSubmissionService
             FilePath = "/uploads/" + fileName
         };
 
-        _context.AssignmentSubmissions.Add(submission);
-
-        await _context.SaveChangesAsync();
+        await _repository.AddSubmissionAsync(submission);
     }
 
-    public async Task<List<AssignmentSubmissionDto>> GetByAssignmentAsync(int assignmentId)
+    public async Task<List<AssignmentSubmissionDto>> GetByAssignmentAsync(
+        int assignmentId)
     {
-        return await _context.AssignmentSubmissions
-            .Include(x => x.Student)
-            .Where(x => x.AssignmentId == assignmentId)
-            .Select(x => new AssignmentSubmissionDto
-            {
-                Id = x.Id,
-                AssignmentId = x.AssignmentId,
-                StudentId = x.StudentId,
-                StudentName = x.Student.Name,
-                FilePath = x.FilePath,
-                SubmittedAt = x.SubmittedAt,
-                Marks = x.Marks,
-                Remarks = x.Remarks,
-                Status = x.Status
-            })
-            .ToListAsync();
+        return await _repository.GetByAssignmentAsync(assignmentId);
     }
 
     public async Task UpdateMarksAsync(
         int submissionId,
         UpdateSubmissionMarksDto dto)
     {
-        var submission = await _context.AssignmentSubmissions
-            .FirstOrDefaultAsync(x => x.Id == submissionId);
+        var submission = await _repository.GetByIdAsync(submissionId);
 
         if (submission == null)
             throw new Exception("Submission not found.");
@@ -83,6 +65,6 @@ public class AssignmentSubmissionService : IAssignmentSubmissionService
         submission.Remarks = dto.Remarks;
         submission.Status = "Reviewed";
 
-        await _context.SaveChangesAsync();
+        await _repository.SaveChangesAsync();
     }
 }

@@ -1,26 +1,29 @@
-using Microsoft.EntityFrameworkCore;
-using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.DTOs.Assignment;
-using StudentGradingSystem.Api.Models;
+using StudentGradingSystem.Api.Interfaces;
 using StudentGradingSystem.Api.Services.Interfaces;
+using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Services;
 
 public class AssignmentService : IAssignmentService
 {
-    private readonly AppDbContext _context;
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IFacultyRepository _facultyRepository;
 
-    public AssignmentService(AppDbContext context)
+    public AssignmentService(
+        IAssignmentRepository assignmentRepository,
+        IFacultyRepository facultyRepository)
     {
-        _context = context;
+        _assignmentRepository = assignmentRepository;
+        _facultyRepository = facultyRepository;
     }
 
     public async Task CreateAssignment(
         int facultyUserId,
         CreateAssignmentDto dto)
     {
-        var faculty = await _context.Faculties
-            .FirstOrDefaultAsync(f => f.ApplicationUserId == facultyUserId);
+        var faculty = await _facultyRepository
+            .GetFacultyByApplicationUserIdAsync(facultyUserId);
 
         if (faculty == null)
             throw new Exception("Faculty not found.");
@@ -35,28 +38,14 @@ public class AssignmentService : IAssignmentService
             MaxMarks = dto.MaxMarks
         };
 
-        _context.Assignments.Add(assignment);
-
-        await _context.SaveChangesAsync();
+        await _assignmentRepository.AddAssignmentAsync(assignment);
     }
 
     public async Task<List<AssignmentResponseDto>> GetAssignments(
         int subjectId)
     {
-        return await _context.Assignments
-            .Where(a => a.SubjectId == subjectId)
-            .OrderByDescending(a => a.CreatedAt)
-            .Select(a => new AssignmentResponseDto
-            {
-                Id = a.Id,
-                Title = a.Title,
-                Description = a.Description,
-                DueDate = a.DueDate,
-                MaxMarks = a.MaxMarks,
-                SubjectName = a.Subject.Name,
-                CreatedAt = a.CreatedAt
-            })
-            .ToListAsync();
+        return await _assignmentRepository
+            .GetAssignmentsBySubjectAsync(subjectId);
     }
 
     public async Task UpdateAssignment(
@@ -64,16 +53,14 @@ public class AssignmentService : IAssignmentService
         int facultyUserId,
         UpdateAssignmentDto dto)
     {
-        var faculty = await _context.Faculties
-            .FirstOrDefaultAsync(f => f.ApplicationUserId == facultyUserId);
+        var faculty = await _facultyRepository
+            .GetFacultyByApplicationUserIdAsync(facultyUserId);
 
         if (faculty == null)
             throw new Exception("Faculty not found.");
 
-        var assignment = await _context.Assignments
-            .FirstOrDefaultAsync(a =>
-                a.Id == id &&
-                a.FacultyId == faculty.Id);
+        var assignment = await _assignmentRepository
+            .GetAssignmentByIdAndFacultyAsync(id, faculty.Id);
 
         if (assignment == null)
             throw new Exception("Assignment not found.");
@@ -83,29 +70,25 @@ public class AssignmentService : IAssignmentService
         assignment.DueDate = dto.DueDate;
         assignment.MaxMarks = dto.MaxMarks;
 
-        await _context.SaveChangesAsync();
+        await _assignmentRepository.SaveChangesAsync();
     }
 
     public async Task DeleteAssignment(
         int id,
         int facultyUserId)
     {
-        var faculty = await _context.Faculties
-            .FirstOrDefaultAsync(f => f.ApplicationUserId == facultyUserId);
+        var faculty = await _facultyRepository
+            .GetFacultyByApplicationUserIdAsync(facultyUserId);
 
         if (faculty == null)
             throw new Exception("Faculty not found.");
 
-        var assignment = await _context.Assignments
-            .FirstOrDefaultAsync(a =>
-                a.Id == id &&
-                a.FacultyId == faculty.Id);
+        var assignment = await _assignmentRepository
+            .GetAssignmentByIdAndFacultyAsync(id, faculty.Id);
 
         if (assignment == null)
             throw new Exception("Assignment not found.");
 
-        _context.Assignments.Remove(assignment);
-
-        await _context.SaveChangesAsync();
+        await _assignmentRepository.RemoveAssignmentAsync(assignment);
     }
 }

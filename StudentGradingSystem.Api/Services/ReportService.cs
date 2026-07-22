@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using StudentGradingSystem.Api.Data;
 using StudentGradingSystem.Api.DTOs.Reports;
 using StudentGradingSystem.Api.Interfaces;
 
@@ -7,31 +5,27 @@ namespace StudentGradingSystem.Api.Services;
 
 public class ReportService : IReportService
 {
-    private readonly AppDbContext _context;
+    private readonly IReportRepository _reportRepository;
 
-    public ReportService(AppDbContext context)
+    public ReportService(IReportRepository reportRepository)
     {
-        _context = context;
+        _reportRepository = reportRepository;
     }
 
     public async Task<List<StudentReportDto>> GetSubjectReport(int subjectId)
     {
-        var students = await _context.StudentSubjects
-            .Where(x => x.SubjectId == subjectId)
-            .Include(x => x.Student)
-            .Select(x => x.Student)
-            .Distinct()
-            .ToListAsync();
+        var studentIds = await _reportRepository
+            .GetStudentIdsBySubjectAsync(subjectId);
 
         var report = new List<StudentReportDto>();
 
-        foreach (var student in students)
+        foreach (var studentId in studentIds)
         {
-            var attendance = await _context.Attendances
-                .Where(a =>
-                    a.StudentId == student.Id &&
-                    a.SubjectId == subjectId)
-                .ToListAsync();
+            var studentName = await _reportRepository
+                .GetStudentNameAsync(studentId);
+
+            var attendance = await _reportRepository
+                .GetAttendanceAsync(studentId, subjectId);
 
             decimal attendancePercentage = 0;
 
@@ -43,34 +37,20 @@ public class ReportService : IReportService
                     / attendance.Count;
             }
 
-            decimal cia1 = await _context.Marks
-                .Where(m =>
-                    m.StudentId == student.Id &&
-                    m.SubjectId == subjectId &&
-                    m.AssessmentType == "CIA1")
-                .Select(m => m.MarksObtained)
-                .FirstOrDefaultAsync();
+            decimal cia1 = await _reportRepository
+                .GetMarkAsync(studentId, subjectId, "CIA1");
 
-            decimal cia2 = await _context.Marks
-                .Where(m =>
-                    m.StudentId == student.Id &&
-                    m.SubjectId == subjectId &&
-                    m.AssessmentType == "CIA2")
-                .Select(m => m.MarksObtained)
-                .FirstOrDefaultAsync();
+            decimal cia2 = await _reportRepository
+                .GetMarkAsync(studentId, subjectId, "CIA2");
 
-            decimal assignment = await _context.Assignments
-                .Where(a =>
-                    a.SubjectId == subjectId)
-                .AnyAsync()
-                    ? cia1 * 0
-                    : 0;
+            decimal assignment = await _reportRepository
+                .GetAssignmentMarkAsync(studentId, subjectId);
 
             report.Add(new StudentReportDto
             {
-                StudentId = student.Id,
-                StudentName = student.Name,
-                AttendancePercentage = attendancePercentage,
+                StudentId = studentId,
+                StudentName = studentName,
+                AttendancePercentage = Math.Round(attendancePercentage, 2),
                 CIA1 = cia1,
                 CIA2 = cia2,
                 Assignment = assignment,
@@ -79,5 +59,30 @@ public class ReportService : IReportService
         }
 
         return report;
+    }
+
+    public async Task<List<FacultyReportDto>> GetFacultyReports()
+    {
+        return await _reportRepository.GetFacultyReportsAsync();
+    }
+
+    public async Task<List<DepartmentReportDto>> GetDepartmentReports()
+    {
+        return await _reportRepository.GetDepartmentReportsAsync();
+    }
+
+    public async Task<List<AttendanceReportDto>> GetAttendanceReports()
+    {
+        return await _reportRepository.GetAttendanceReportsAsync();
+    }
+
+    public async Task<List<MarksReportDto>> GetMarksReports()
+    {
+        return await _reportRepository.GetMarksReportsAsync();
+    }
+
+    public async Task<List<SubjectReportDto>> GetSubjectReports()
+    {
+        return await _reportRepository.GetSubjectReportsAsync();
     }
 }

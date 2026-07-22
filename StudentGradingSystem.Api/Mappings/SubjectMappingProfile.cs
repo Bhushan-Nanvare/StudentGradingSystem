@@ -4,9 +4,9 @@ using StudentGradingSystem.Api.Models;
 
 namespace StudentGradingSystem.Api.Mappings;
 
-public class SubjectProfile : Profile
+public class SubjectMappingProfile : Profile
 {
-    public SubjectProfile()
+    public SubjectMappingProfile()
     {
         CreateMap<CreateSubjectDto, Subject>();
 

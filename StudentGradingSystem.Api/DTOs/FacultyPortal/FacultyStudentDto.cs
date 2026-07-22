@@ -1,6 +1,6 @@
-namespace StudentGradingSystem.Api.DTOs.Teacher;
+namespace StudentGradingSystem.Api.DTOs.FacultyPortal;
 
-public class TeacherStudentDto
+public class FacultyStudentDto
 {
     public int Id { get; set; }
 

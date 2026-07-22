@@ -33,11 +33,12 @@ public class AttendanceController : ControllerBase
 
     [HttpGet("{subjectId}")]
     public async Task<IActionResult> GetAttendance(
-        int subjectId)
+        int subjectId,
+        [FromQuery] DateOnly date)
     {
         var attendance =
-            await _attendanceService.GetAttendance(subjectId);
+            await _attendanceService.GetAttendance(subjectId, date);
 
         return Ok(attendance);
     }
-}
+}
