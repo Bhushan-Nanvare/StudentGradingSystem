@@ -17,14 +17,34 @@ export const adminNavigation = [
     icon: LayoutDashboard,
   },
   {
+    title: "Analytics",
+    path: "/admin/analytics",
+    icon: BarChart3,
+  },
+  {
+    title: "Reports",
+    path: "/admin/reports",
+    icon: ClipboardList,
+  },
+  {
+    title: "CGPA",
+    path: "/admin/cgpa",
+    icon: GraduationCap,
+  },
+  {
+    title: "Notifications",
+    path: "/admin/notifications",
+    icon: CalendarCheck, // Assuming some icon for now
+  },
+  {
     title: "Students",
     path: "/admin/students",
-    icon: GraduationCap,
+    icon: Users,
   },
   {
     title: "Faculty",
     path: "/admin/faculty",
-    icon: Users,
+    icon: User,
   },
   {
     title: "Departments",
@@ -76,6 +96,16 @@ export const studentNavigation = [
     title: "Assignments",
     path: "/student/assignments",
     icon: ClipboardList,
+  },
+  {
+    title: "CGPA",
+    path: "/student/cgpa",
+    icon: GraduationCap,
+  },
+  {
+    title: "Notifications",
+    path: "/student/notifications",
+    icon: CalendarCheck, // Using existing icon for now
   },
   {
     title: "Profile",

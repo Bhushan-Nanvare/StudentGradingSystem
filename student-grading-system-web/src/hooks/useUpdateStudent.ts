@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateStudent } from "@/services/studentService";
+import type { UpdateStudentRequest } from "@/types/student";
 
 export const useUpdateStudent = () => {
   const queryClient = useQueryClient();
@@ -10,12 +11,7 @@ export const useUpdateStudent = () => {
       student,
     }: {
       id: number;
-      student: {
-        name: string;
-        age: number;
-        cgpa: number;
-        departmentId: number;
-      };
+      student: UpdateStudentRequest;
     }) => updateStudent(id, student),
 
     onSuccess: () => {

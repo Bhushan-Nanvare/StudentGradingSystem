@@ -13,8 +13,12 @@ type AttendanceStudent = {
 export default function AttendanceTab() {
   const { subjectId } = useParams();
 
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
+
   const { data: attendance, isLoading } =
-    useAttendance(Number(subjectId));
+    useAttendance(Number(subjectId), date);
 
   const [attendanceState, setAttendanceState] =
     useState<Record<number, boolean>>({});
@@ -34,6 +38,7 @@ export default function AttendanceTab() {
   const saveAttendance = () => {
     mutation.mutate({
       subjectId: Number(subjectId),
+      date,
       students:
         ((attendance as AttendanceStudent[] | undefined)?.map(
           (student) => ({
@@ -52,9 +57,21 @@ export default function AttendanceTab() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-bold">
-        Attendance
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">
+          Attendance
+        </h1>
+
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium">Date:</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="rounded border p-2"
+          />
+        </div>
+      </div>
 
       <div className="space-y-3">
         {(attendance as AttendanceStudent[] | undefined)?.map(
@@ -79,9 +96,16 @@ export default function AttendanceTab() {
                     e.target.checked
                   )
                 }
+                className="h-5 w-5 rounded border-gray-300"
               />
             </div>
           )
+        )}
+
+        {(!attendance || (attendance as AttendanceStudent[]).length === 0) && (
+          <div className="py-8 text-center text-gray-500 border rounded">
+            No students found for this subject.
+          </div>
         )}
       </div>
 

@@ -33,6 +33,14 @@ import MarksPage from "@/pages/StudentPortal/MarksPage";
 import AssignmentsPage from "@/pages/StudentPortal/AssignmentsPage";
 import ProfilePage from "@/pages/StudentPortal/ProfilePage";
 
+import AnalyticsPage from "@/pages/Admin/AnalyticsPage";
+import ReportsPage from "@/pages/Admin/ReportsPage";
+import CgpaReportsPage from "@/pages/Admin/CgpaReportsPage";
+import NotificationsPage from "@/pages/Admin/NotificationsPage";
+
+import StudentCgpaPage from "@/pages/StudentPortal/CgpaPage";
+import StudentNotificationsPage from "@/pages/StudentPortal/NotificationsPage";
+
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -68,6 +76,26 @@ function AppRoutes() {
           <Route
             path="dashboard"
             element={<DashboardPage />}
+          />
+
+          <Route
+            path="analytics"
+            element={<AnalyticsPage />}
+          />
+
+          <Route
+            path="reports"
+            element={<ReportsPage />}
+          />
+
+          <Route
+            path="cgpa"
+            element={<CgpaReportsPage />}
+          />
+
+          <Route
+            path="notifications"
+            element={<NotificationsPage />}
           />
 
           <Route
@@ -194,6 +222,16 @@ function AppRoutes() {
           <Route
             path="assignments"
             element={<AssignmentsPage />}
+          />
+          
+          <Route
+            path="cgpa"
+            element={<StudentCgpaPage />}
+          />
+
+          <Route
+            path="notifications"
+            element={<StudentNotificationsPage />}
           />
 
           <Route

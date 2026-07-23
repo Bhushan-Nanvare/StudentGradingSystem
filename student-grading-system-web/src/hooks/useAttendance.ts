@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getAttendance } from "@/services/attendanceService";
 
 export const useAttendance = (
-  subjectId: number
+  subjectId: number,
+  date: string
 ) =>
   useQuery({
-    queryKey: ["attendance", subjectId],
-    queryFn: () => getAttendance(subjectId),
+    queryKey: ["attendance", subjectId, date],
+    queryFn: () => getAttendance(subjectId, date),
   });

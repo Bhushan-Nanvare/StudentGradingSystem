@@ -5,6 +5,7 @@ export interface StudentAttendance {
 
 export interface MarkAttendanceRequest {
   subjectId: number;
+  date: string;
   students: StudentAttendance[];
 }
 

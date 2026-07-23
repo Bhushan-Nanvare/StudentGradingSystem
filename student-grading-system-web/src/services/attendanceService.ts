@@ -9,8 +9,9 @@ export const markAttendance = async (
 };
 
 export const getAttendance = async (
-  subjectId: number
+  subjectId: number,
+  date: string
 ) => {
-  const res = await api.get(`/attendance/${subjectId}`);
+  const res = await api.get(`/attendance/${subjectId}?date=${date}`);
   return res.data;
 };
