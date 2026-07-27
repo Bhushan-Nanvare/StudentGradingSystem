@@ -72,6 +72,39 @@ public static class FacultySeeder
                 Salary = 71000m,
                 JoiningDate = DateTime.SpecifyKind(new DateTime(2021, 4, 12), DateTimeKind.Utc),
                 DepartmentId = departments.First(d => d.Name == "Electrical Engineering").Id
+            },
+            new Faculty
+            {
+                EmployeeCode = "FAC-1006",
+                FirstName = "Anita",
+                LastName = "Desai",
+                Email = "anita.desai@university.edu",
+                Designation = "Assistant Professor",
+                Salary = 68000m,
+                JoiningDate = DateTime.SpecifyKind(new DateTime(2022, 2, 10), DateTimeKind.Utc),
+                DepartmentId = departments.First(d => d.Name == "Computer Science").Id
+            },
+            new Faculty
+            {
+                EmployeeCode = "FAC-1007",
+                FirstName = "Rajesh",
+                LastName = "Kumar",
+                Email = "rajesh.kumar@university.edu",
+                Designation = "Professor",
+                Salary = 92000m,
+                JoiningDate = DateTime.SpecifyKind(new DateTime(2016, 7, 22), DateTimeKind.Utc),
+                DepartmentId = departments.First(d => d.Name == "Mechanical Engineering").Id
+            },
+            new Faculty
+            {
+                EmployeeCode = "FAC-1008",
+                FirstName = "Kavita",
+                LastName = "Reddy",
+                Email = "kavita.reddy@university.edu",
+                Designation = "Associate Professor",
+                Salary = 85000m,
+                JoiningDate = DateTime.SpecifyKind(new DateTime(2019, 11, 5), DateTimeKind.Utc),
+                DepartmentId = departments.First(d => d.Name == "Information Technology").Id
             }
         };
 

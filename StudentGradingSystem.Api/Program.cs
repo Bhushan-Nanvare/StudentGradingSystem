@@ -156,6 +156,9 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider
         .GetRequiredService<AppDbContext>();
 
+    // Apply any pending migrations to create tables before seeding
+    await context.Database.MigrateAsync();
+
     await DatabaseSeeder.SeedAsync(context);
 }
 

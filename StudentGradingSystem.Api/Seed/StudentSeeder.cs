@@ -61,6 +61,51 @@ public static class StudentSeeder
                 CGPA = 8.9,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "Seeder"
+            },
+            new Student
+            {
+                Name = "Pooja Patel",
+                Age = 20,
+                DepartmentId = departments.First(d => d.Name == "Computer Science").Id,
+                CGPA = 9.4,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Seeder"
+            },
+            new Student
+            {
+                Name = "Kabir Singh",
+                Age = 21,
+                DepartmentId = departments.First(d => d.Name == "Mechanical Engineering").Id,
+                CGPA = 7.5,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Seeder"
+            },
+            new Student
+            {
+                Name = "Sneha Gupta",
+                Age = 22,
+                DepartmentId = departments.First(d => d.Name == "Information Technology").Id,
+                CGPA = 8.8,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Seeder"
+            },
+            new Student
+            {
+                Name = "Aman Verma",
+                Age = 20,
+                DepartmentId = departments.First(d => d.Name == "Civil Engineering").Id,
+                CGPA = 8.1,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Seeder"
+            },
+            new Student
+            {
+                Name = "Priya Sharma",
+                Age = 23,
+                DepartmentId = departments.First(d => d.Name == "Electrical Engineering").Id,
+                CGPA = 9.0,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Seeder"
             }
         };
 
