@@ -12,6 +12,10 @@ export default function TeacherDashboardPage() {
   if (isLoading) return <LoadingSpinner />;
   if (isError || !data) return <ErrorCard onRetry={refetch} />;
 
+  const departmentLabel = data.department
+    ? data.department.substring(0, 3).toUpperCase()
+    : "N/A";
+
   return (
     <div className="space-y-6">
       <div>
@@ -19,7 +23,7 @@ export default function TeacherDashboardPage() {
           Welcome, Prof. {data.facultyName || username} 👋
         </h1>
         <p className="mt-2 text-slate-500">
-          {data.departmentName} Department
+          {data.department || "Unknown"} Department
         </p>
       </div>
 
@@ -31,17 +35,17 @@ export default function TeacherDashboardPage() {
         />
         <StatsCard 
           title="Total Students" 
-          value={data.totalStudentsTaught} 
+          value={data.totalStudents} 
           icon={Users} 
         />
         <StatsCard 
-          title="Upcoming Classes" 
-          value={data.upcomingClassesCount} 
+          title="Total Assignments" 
+          value={data.totalAssignments} 
           icon={Calendar} 
         />
         <StatsCard 
           title="Department" 
-          value={data.departmentName.substring(0, 3).toUpperCase()} 
+          value={departmentLabel} 
           icon={GraduationCap} 
         />
       </div>

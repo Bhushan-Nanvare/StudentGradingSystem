@@ -1,7 +1,9 @@
 export interface FacultyDashboardData {
   facultyName: string;
-  departmentName: string;
+  department: string;
   totalSubjects: number;
-  totalStudentsTaught: number;
-  upcomingClassesCount: number;
+  totalStudents: number;
+  totalAssignments: number;
+  designation: string;
+  employeeCode: string;
 }
