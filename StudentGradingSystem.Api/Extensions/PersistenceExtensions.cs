@@ -15,9 +15,15 @@ public static class PersistenceExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         
         // Render provides a postgres:// URL, Npgsql expects a standard ADO.NET string
-        if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres://"))
+        if (!string.IsNullOrWhiteSpace(connectionString))
         {
-            connectionString = BuildConnectionStringFromUrl(connectionString);
+            connectionString = connectionString.Trim().Trim('"', '\'');
+            
+            if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) || 
+                connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+            {
+                connectionString = BuildConnectionStringFromUrl(connectionString);
+            }
         }
 
         services.AddDbContext<AppDbContext>(options =>
@@ -32,6 +38,10 @@ public static class PersistenceExtensions
     {
         var uri = new Uri(url);
         var userInfo = uri.UserInfo.Split(':');
-        return $"Host={uri.Host};Port={uri.Port};Database={uri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SslMode=Prefer;Trust Server Certificate=true;";
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var port = uri.Port > 0 ? uri.Port : 5432;
+        
+        return $"Host={uri.Host};Port={port};Database={uri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true;";
     }
 }
