@@ -14,15 +14,29 @@ public static class PersistenceExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         
+        Console.WriteLine($"[DEBUG] Raw Connection String Length: {connectionString?.Length ?? 0}");
+        Console.WriteLine($"[DEBUG] Raw StartsWith postgres://: {connectionString?.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)}");
+        Console.WriteLine($"[DEBUG] Raw First 10 Chars: {(connectionString?.Length >= 10 ? connectionString.Substring(0, 10) : connectionString)}");
+
         // Render provides a postgres:// URL, Npgsql expects a standard ADO.NET string
         if (!string.IsNullOrWhiteSpace(connectionString))
         {
+            var original = connectionString;
             connectionString = connectionString.Trim().Trim('"', '\'');
             
             if (connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) || 
                 connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine("[DEBUG] Parsed Render URL successfully.");
                 connectionString = BuildConnectionStringFromUrl(connectionString);
+            }
+            else if (original != connectionString)
+            {
+                Console.WriteLine("[DEBUG] Connection string was trimmed but didn't match postgres://");
+            }
+            else 
+            {
+                Console.WriteLine("[DEBUG] Connection string did not match postgres://. Using raw.");
             }
         }
 
