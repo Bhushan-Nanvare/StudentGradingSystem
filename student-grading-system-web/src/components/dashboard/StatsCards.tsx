@@ -40,26 +40,40 @@ function StatsCards() {
       value: data.subjectCount,
       color: "bg-purple-500",
     },
+    {
+      title: "Assignments",
+      value: data.assignmentCount,
+      color: "bg-indigo-500",
+    },
+    {
+      title: "Attendance",
+      value: `${data.attendanceStats.overallAttendancePercentage.toFixed(1)}%`,
+      color: "bg-teal-500",
+    },
+    {
+      title: "Avg Marks",
+      value: data.marksStats.averageMarks.toFixed(1),
+      color: "bg-rose-500",
+    },
+    {
+      title: "Marks Entries",
+      value: data.marksStats.totalMarksEntries,
+      color: "bg-amber-500",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {stats.map((stat) => (
         <div
           key={stat.title}
           className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
         >
-          <div
-            className={`mb-4 h-3 w-16 rounded-full ${stat.color}`}
-          />
+          <div className={`mb-4 h-3 w-16 rounded-full ${stat.color}`} />
 
-          <h3 className="text-sm text-slate-500">
-            {stat.title}
-          </h3>
+          <h3 className="text-sm text-slate-500">{stat.title}</h3>
 
-          <p className="mt-2 text-4xl font-bold">
-            {stat.value}
-          </p>
+          <p className="mt-2 text-4xl font-bold">{stat.value}</p>
         </div>
       ))}
     </div>

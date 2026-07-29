@@ -20,29 +20,31 @@ export interface FacultyReport {
 
 export interface DepartmentReport {
   departmentId: number;
-  departmentCode: string;
   departmentName: string;
   facultyCount: number;
   studentCount: number;
   subjectCount: number;
+  averageCGPA: number;
 }
 
 export interface AttendanceReport {
   subjectId: number;
   subjectCode: string;
   subjectName: string;
-  totalClasses: number;
+  totalClassesConducted: number;
+  totalPresentRecords: number;
+  totalAbsentRecords: number;
   averageAttendancePercentage: number;
 }
 
 export interface MarksReport {
   subjectId: number;
-  subjectCode: string;
   subjectName: string;
+  assessmentType: string;
+  studentsGraded: number;
   averageMarks: number;
   highestMarks: number;
   lowestMarks: number;
-  passPercentage: number;
 }
 
 export interface SubjectReport {
@@ -54,4 +56,5 @@ export interface SubjectReport {
   enrolledStudentsCount: number;
   credits: number;
   semester: number;
+  averageMarks: number;
 }

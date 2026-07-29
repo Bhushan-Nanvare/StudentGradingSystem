@@ -1,61 +1,51 @@
-
-// NOTE:
-// These values are intentionally hardcoded during the UI development phase.
-// They will be populated from the Dashboard API after frontend-backend integration.
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
-const chartData = [
-  { month: "Jan", students: 320 },
-  { month: "Feb", students: 410 },
-  { month: "Mar", students: 520 },
-  { month: "Apr", students: 610 },
-  { month: "May", students: 700 },
-  { month: "Jun", students: 840 },
-];
+interface EnrollmentChartProps {
+  data: { name: string; students: number }[];
+  isLoading?: boolean;
+}
 
-function EnrollmentChart() {
+function EnrollmentChart({ data, isLoading }: EnrollmentChartProps) {
+  if (isLoading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm h-96 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-
       <h2 className="mb-6 text-xl font-semibold">
-        Student Enrollment
+        Student Enrollment by Department
       </h2>
 
       <div className="h-72">
-
-        <ResponsiveContainer width="100%" height="100%">
-
-          <LineChart data={chartData}>
-
-            <CartesianGrid strokeDasharray="3 3" />
-
-            <XAxis dataKey="month" />
-
-            <YAxis />
-
-            <Tooltip />
-
-            <Line
-              type="monotone"
-              dataKey="students"
-              stroke="#2563eb"
-              strokeWidth={3}
-            />
-
-          </LineChart>
-
-        </ResponsiveContainer>
-
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="students" fill="#2563eb" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-full items-center justify-center text-slate-500">
+            No enrollment data available.
+          </div>
+        )}
       </div>
-
     </div>
   );
 }
