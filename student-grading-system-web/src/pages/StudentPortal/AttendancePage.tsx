@@ -1,37 +1,73 @@
 import { useStudentAttendance } from "@/hooks/useStudentPortal";
+import DataTable, { type Column } from "@/components/common/DataTable";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import type { StudentAttendance } from "@/types/studentPortal";
+
+const columns: Column<StudentAttendance>[] = [
+  { key: "subject", header: "Subject", sortable: true },
+  {
+    key: "totalClasses",
+    header: "Total Classes",
+    sortable: true,
+    render: (row) => <span className="font-medium">{row.totalClasses}</span>,
+  },
+  {
+    key: "presentClasses",
+    header: "Present",
+    sortable: true,
+    render: (row) => (
+      <span className="font-medium text-emerald-600">{row.presentClasses}</span>
+    ),
+  },
+  {
+    key: "percentage",
+    header: "Percentage",
+    sortable: true,
+    render: (row) => {
+      const pct = row.percentage;
+      return (
+        <div className="flex items-center gap-3">
+          <div className="h-2 w-20 rounded-full bg-slate-100 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${
+                pct >= 75 ? "bg-emerald-500" : pct >= 50 ? "bg-amber-500" : "bg-red-500"
+              }`}
+              style={{ width: `${Math.min(pct, 100)}%` }}
+            />
+          </div>
+          <span
+            className={`text-sm font-bold ${
+              pct >= 75 ? "text-emerald-600" : pct >= 50 ? "text-amber-600" : "text-red-600"
+            }`}
+          >
+            {pct.toFixed(1)}%
+          </span>
+        </div>
+      );
+    },
+  },
+];
 
 export default function AttendancePage() {
   const { data, isLoading } = useStudentAttendance();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">
-        Attendance
-      </h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-800">Attendance</h1>
+        <p className="text-sm text-slate-500 mt-1">
+          Your attendance across all enrolled subjects
+        </p>
+      </div>
 
-      <table className="w-full border">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border p-3">Subject</th>
-            <th className="border p-3">Total</th>
-            <th className="border p-3">Present</th>
-            <th className="border p-3">Percentage</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {data?.map((attendance, index) => (
-            <tr key={index}>
-              <td className="border p-3">{attendance.subject}</td>
-              <td className="border p-3">{attendance.totalClasses}</td>
-              <td className="border p-3">{attendance.presentClasses}</td>
-              <td className="border p-3">{attendance.percentage}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        data={data ?? []}
+        columns={columns}
+        keyExtractor={(row) => row.subject}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

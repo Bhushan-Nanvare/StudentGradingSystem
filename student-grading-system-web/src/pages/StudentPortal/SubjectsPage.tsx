@@ -1,39 +1,63 @@
 import { useStudentSubjects } from "@/hooks/useStudentPortal";
+import DataTable, { type Column } from "@/components/common/DataTable";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import type { StudentSubject } from "@/types/studentPortal";
+
+const columns: Column<StudentSubject>[] = [
+  {
+    key: "subjectCode",
+    header: "Code",
+    sortable: true,
+    render: (row) => (
+      <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+        {row.subjectCode}
+      </span>
+    ),
+  },
+  { key: "subjectName", header: "Subject", sortable: true },
+  {
+    key: "credits",
+    header: "Credits",
+    sortable: true,
+    render: (row) => (
+      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
+        {row.credits}
+      </span>
+    ),
+  },
+  {
+    key: "semester",
+    header: "Semester",
+    sortable: true,
+    render: (row) => (
+      <span className="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-medium text-violet-700">
+        Sem {row.semester}
+      </span>
+    ),
+  },
+  { key: "faculty", header: "Faculty", sortable: true },
+];
 
 export default function SubjectsPage() {
   const { data, isLoading } = useStudentSubjects();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">
-        My Subjects
-      </h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-800">My Subjects</h1>
+        <p className="text-sm text-slate-500 mt-1">
+          {data?.length ?? 0} subjects enrolled this semester
+        </p>
+      </div>
 
-      <table className="w-full border">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border p-3">Code</th>
-            <th className="border p-3">Subject</th>
-            <th className="border p-3">Credits</th>
-            <th className="border p-3">Semester</th>
-            <th className="border p-3">Faculty</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {data?.map((subject) => (
-            <tr key={subject.id}>
-              <td className="border p-3">{subject.subjectCode}</td>
-              <td className="border p-3">{subject.subjectName}</td>
-              <td className="border p-3">{subject.credits}</td>
-              <td className="border p-3">{subject.semester}</td>
-              <td className="border p-3">{subject.faculty}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        data={data ?? []}
+        columns={columns}
+        keyExtractor={(row) => row.id}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

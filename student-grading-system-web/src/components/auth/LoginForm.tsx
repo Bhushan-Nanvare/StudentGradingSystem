@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { User, Lock, Loader2 } from "lucide-react";
 
 import { loginSchema, type LoginFormValues } from "@/schemas/loginSchema";
 import { useLogin } from "@/hooks/useLogin";
@@ -54,33 +54,61 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5">
       <div>
-        <label className="mb-2 block text-sm font-medium">Username</label>
-
-        <Input {...form.register("username")} disabled={isPending} />
-
-        <p className="mt-1 text-sm text-red-500">
-          {form.formState.errors.username?.message}
-        </p>
+        <label className="mb-2 block text-sm font-medium text-slate-300">
+          Username
+        </label>
+        <div className="relative">
+          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <input
+            {...form.register("username")}
+            disabled={isPending}
+            placeholder="Enter your username"
+            className="h-11 w-full rounded-lg border border-white/10 bg-white/[0.06] pl-10 pr-4 text-sm text-white placeholder:text-slate-500 transition-all duration-200 focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
+          />
+        </div>
+        {form.formState.errors.username && (
+          <p className="mt-1.5 text-xs text-red-400">
+            {form.formState.errors.username.message}
+          </p>
+        )}
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium">Password</label>
-
-        <Input
-          type="password"
-          {...form.register("password")}
-          disabled={isPending}
-        />
-
-        <p className="mt-1 text-sm text-red-500">
-          {form.formState.errors.password?.message}
-        </p>
+        <label className="mb-2 block text-sm font-medium text-slate-300">
+          Password
+        </label>
+        <div className="relative">
+          <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <input
+            type="password"
+            {...form.register("password")}
+            disabled={isPending}
+            placeholder="Enter your password"
+            className="h-11 w-full rounded-lg border border-white/10 bg-white/[0.06] pl-10 pr-4 text-sm text-white placeholder:text-slate-500 transition-all duration-200 focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
+          />
+        </div>
+        {form.formState.errors.password && (
+          <p className="mt-1.5 text-xs text-red-400">
+            {form.formState.errors.password.message}
+          </p>
+        )}
       </div>
 
-      <Button className="w-full" type="submit" disabled={isPending}>
-        {isPending ? "Signing In..." : "Sign In"}
+      <Button
+        className="w-full h-11 bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium rounded-lg transition-all duration-200 hover:from-blue-500 hover:to-violet-500 hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] disabled:opacity-60"
+        type="submit"
+        disabled={isPending}
+      >
+        {isPending ? (
+          <span className="flex items-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Signing In...
+          </span>
+        ) : (
+          "Sign In"
+        )}
       </Button>
     </form>
   );

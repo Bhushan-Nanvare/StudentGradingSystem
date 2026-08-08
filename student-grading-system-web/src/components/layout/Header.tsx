@@ -1,4 +1,4 @@
-import { Bell, User, LogOut } from "lucide-react";
+import { Bell, User, LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 
-export default function Header() {
+interface HeaderProps {
+  onMenuToggle?: () => void;
+}
+
+export default function Header({ onMenuToggle }: HeaderProps) {
   const { username, role, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,16 +26,27 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-white px-6 shadow-sm">
-      <div className="flex items-center gap-4 lg:hidden">
-        {/* Mobile menu toggle could go here */}
-        <h1 className="text-xl font-bold text-slate-800">SGS ERP</h1>
-      </div>
-      
-      <div className="hidden lg:block">
-        <h2 className="text-lg font-semibold text-slate-800">
-          {role === "Admin" ? "University Administration" : 
-           role === "Faculty" ? "Faculty Portal" : "Student Portal"}
-        </h2>
+      <div className="flex items-center gap-4">
+        {/* Mobile menu toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden text-slate-600 hover:text-slate-900"
+          onClick={onMenuToggle}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        <div className="lg:hidden">
+          <h1 className="text-xl font-bold text-slate-800">SGS ERP</h1>
+        </div>
+
+        <div className="hidden lg:block">
+          <h2 className="text-lg font-semibold text-slate-800">
+            {role === "Admin" ? "University Administration" : 
+             role === "Faculty" ? "Faculty Portal" : "Student Portal"}
+          </h2>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">
@@ -43,7 +58,7 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 pl-2 hover:bg-slate-50">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600 text-white">
                 <User className="h-4 w-4" />
               </div>
               <div className="hidden text-left md:block">
